@@ -126,7 +126,7 @@ class AceEditorWidget extends React.Component<any> {
                 <AceEditor
                     placeholder={this.state.placeholder}
                     // maxLines={40}
-                    height={'600px'}
+                    height={'90vh'}
                     width={'650px'}
                     mode={this.state.mode}
                     theme={this.state.theme}

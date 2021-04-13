@@ -35,7 +35,7 @@
   padding-top: 10px;
 }
 .ace-editor-controller {
-  padding-top: 100px;
+  padding-top: 15vh;
   padding-left: 50px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .trace-table-placeholder {
-  height: 100vh; /* Magic here */
+  height: 90vh; /* Magic here */
   display: flex;
   justify-content: center;
   align-items: center;

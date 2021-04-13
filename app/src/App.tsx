@@ -30,13 +30,13 @@ class App extends React.Component<any, any> {
         <div className="nav-wrapper">
             <NavBarInstance activeKey={activeKey} onSelect={this.handleSelect} />
             <Row className="editor-container">
-                <Col xs md={4}>
+                <Col xs={12} md={4}>
                     <AceEditor/>
                 </Col>
                 <Col xs md={1}>
                     <EditorController/>
                 </Col>
-                <Col xs md={7}>
+                <Col xs={12} md={7}>
                     <TraceTable/>
                 </Col>
             </Row>

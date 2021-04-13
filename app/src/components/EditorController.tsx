@@ -2,7 +2,7 @@ import * as React from "react";
 import Row from "react-bootstrap/Row";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronUp, faChevronDown, faPlay } from "@fortawesome/free-solid-svg-icons";
 
 class EditorController extends React.Component<any> {
     render() {
@@ -10,7 +10,7 @@ class EditorController extends React.Component<any> {
             <div>
                 <Row className="ace-editor-controller run">
                     <Button className="ace-editor-code-run-btn" variant="success">
-                        Run
+                        <FontAwesomeIcon icon={faPlay} fixedWidth />
                     </Button>{' '}
                 </Row>
                 <Row className="ace-editor-controller up">

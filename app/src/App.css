@@ -50,6 +50,29 @@
   width: 100px;
 }
 
+.trace-table-canvas {
+  background: #f7f7f7;
+  margin-top: 16px;
+  height: auto;
+}
+
+.trace-table-placeholder {
+  height: 100vh; /* Magic here */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.editor-container {
+  margin-right: 0;
+}
+
+.trace-table-placeholder span {
+  font-weight: 700;
+  font-size: 30px;
+  color: #4e555b;
+  opacity: 0.4;
+}
+
 .App-link {
   color: #61dafb;
 }

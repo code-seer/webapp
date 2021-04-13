@@ -3,11 +3,11 @@ import * as React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBarInstance from "./components/NavbarInstance";
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AceEditor from "./components/AceEditorWidget";
 import EditorController from "./components/EditorController";
+import TraceTable from "./components/TraceTable";
 
 class App extends React.Component<any, any> {
     constructor(props: {} | Readonly<{}>) {
@@ -29,15 +29,15 @@ class App extends React.Component<any, any> {
     return (
         <div className="nav-wrapper">
             <NavBarInstance activeKey={activeKey} onSelect={this.handleSelect} />
-            <Row>
+            <Row className="editor-container">
                 <Col xs md={4}>
                     <AceEditor/>
                 </Col>
-                <Col xs md={2}>
+                <Col xs md={1}>
                     <EditorController/>
                 </Col>
-                <Col xs lg="2">
-                    3 of 3
+                <Col xs md={7}>
+                    <TraceTable/>
                 </Col>
             </Row>
         </div>

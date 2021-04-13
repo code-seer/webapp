@@ -34,6 +34,21 @@
 .ace-editor {
   padding-top: 10px;
 }
+.ace-editor-controller {
+  padding-top: 100px;
+  padding-left: 50px;
+}
+
+.ace-editor-controller.down  {
+  padding-top: 20px;
+}
+
+.ace-editor-controller .btn {
+  font-weight: 700;
+}
+.ace-editor-code-run-btn {
+  width: 100px;
+}
 
 .App-link {
   color: #61dafb;

@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AceEditor from "./components/AceEditorWidget";
+import EditorController from "./components/EditorController";
 
 class App extends React.Component<any, any> {
     constructor(props: {} | Readonly<{}>) {
@@ -29,10 +30,12 @@ class App extends React.Component<any, any> {
         <div className="nav-wrapper">
             <NavBarInstance activeKey={activeKey} onSelect={this.handleSelect} />
             <Row>
-                <Col xs lg="6">
+                <Col xs md={4}>
                     <AceEditor/>
                 </Col>
-                <Col md="auto">Variable width content</Col>
+                <Col xs md={2}>
+                    <EditorController/>
+                </Col>
                 <Col xs lg="2">
                     3 of 3
                 </Col>

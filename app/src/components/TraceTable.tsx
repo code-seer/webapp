@@ -18,7 +18,12 @@ class TraceTable extends React.Component<any> {
                             <li>Function: {event.func_name}</li>
                             <li>Line No: {event.line}</li>
                             <li>Globals: </li>
-                            <li>Heap: </li>
+                            <li>Heap: {Object.keys(event.heap).map((heapKey, index) => {
+                                return <ul key={heapKey}>
+                                    {event.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}
+                                </ul>
+                                }
+                            )}</li>
                             <li>Ordered Globals: {event.ordered_globals.map(og => <ul><li>{og}</li></ul>)} </li>
                             <li>Output: {event.stdout}</li>
                         </ul>)

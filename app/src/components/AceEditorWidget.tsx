@@ -2,10 +2,11 @@ import * as React from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
-import Button from 'react-bootstrap/Button';
+import {observer, inject} from 'mobx-react';
 
 
 import "ace-builds/src-noconflict/mode-jsx";
+import {UserCodeStore} from "../store/Stores";
 const languages = [
     "javascript",
     "java",
@@ -51,7 +52,10 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 const defaultValue = `# Python 2.7
 print "Hello, World!"`;
 
+@inject('rootStore')
+@observer
 class AceEditorWidget extends React.Component<any> {
+    userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
     state = {
         value: defaultValue,
         placeholder: "",
@@ -71,7 +75,7 @@ class AceEditorWidget extends React.Component<any> {
         // console.log("i've loaded");
     }
     onChange = (newValue: any) => {
-        // console.log("change", newValue);
+        this.userCodeStore.code = newValue;
         this.setState({
             value: newValue
         });
@@ -118,14 +122,10 @@ class AceEditorWidget extends React.Component<any> {
     }
 
     render() {
-        const {
-            classes,
-        } = this.props;
         return (
             <div className="ace-editor">
                 <AceEditor
                     placeholder={this.state.placeholder}
-                    // maxLines={40}
                     height={'90vh'}
                     width={'650px'}
                     mode={this.state.mode}

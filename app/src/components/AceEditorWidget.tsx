@@ -49,15 +49,13 @@ languages.forEach(lang => {
 });
 
 themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
-const defaultValue = `# Python 2.7
-print "Hello, World!"`;
 
 @inject('rootStore')
 @observer
 class AceEditorWidget extends React.Component<any> {
     userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
     state = {
-        value: defaultValue,
+        value: this.userCodeStore.code,
         placeholder: "",
         theme: "xcode",
         mode: "python",
@@ -76,6 +74,7 @@ class AceEditorWidget extends React.Component<any> {
     }
     onChange = (newValue: any) => {
         this.userCodeStore.code = newValue;
+        console.log("new code: " + this.userCodeStore.code)
         this.setState({
             value: newValue
         });

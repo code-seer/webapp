@@ -13,8 +13,23 @@ class EditorController extends React.Component<any> {
     traceTableStore: TraceTableStore = this.props.rootStore.traceTableStore;
 
     onRun = () => {
-        this.traceTableStore.data = this.userCodeStore.code;
-        console.log("data value has been set: " + this.traceTableStore.data)
+        const url = "http://localhost:5000/visualizer"
+        const body = {
+            "py_version": 2.7,
+            "user_code": "aW5wdXQgPSAnSm9obixEb2UsMTk4NCw0LDEsbWFsZScKCnRva2VucyA9IGlucHV0LnNwbGl0KCcsJykKZmlyc3ROYW1lID0gdG9rZW5zWzBdCmxhc3ROYW1lID0gdG9rZW5zWzFdCmJpcnRoZGF0ZSA9IChpbnQodG9rZW5zWzJdKSwgaW50KHRva2Vuc1szXSksIGludCh0b2tlbnNbNF0pKQppc01hbGUgPSAodG9rZW5zWzVdID09ICdtYWxlJykKCnByaW50KCdIaSAnICsgZmlyc3ROYW1lICsgJyAnICsgbGFzdE5hbWUgKyA1KQ=="
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        };
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                this.traceTableStore.data = data;
+                console.log("Server response", data)
+            });
     }
 
     render() {

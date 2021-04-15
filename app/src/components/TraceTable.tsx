@@ -2,6 +2,7 @@ import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
 import {TraceTableItem, TraceTableStore, UserCodeStore} from "../store/Stores";
+import {set} from "mobx";
 
 @inject('rootStore')
 @observer
@@ -42,8 +43,17 @@ class TraceTable extends React.Component<any> {
     getTableHeader = (index: number) => {
         let header: any[] | undefined;
         if (this.traceTableStore.trace) {
-            const orderGlobals = this.traceTableStore.trace[index].ordered_globals
-            header = orderGlobals?.map(og => <th key={index}>{og}</th>)
+            const globals = new Set();
+            this.traceTableStore.trace.forEach((item: TraceTableItem) => {
+                if (item.ordered_globals) {
+                    item.ordered_globals.forEach(it => globals.add(it))
+                }
+            })
+            const orderGlobals: any[] = [];
+            orderGlobals.push("Line");
+            orderGlobals.push(...Array.from(globals.values()).sort());
+            orderGlobals.push("Output")
+            header = orderGlobals?.map((og: any) => <th key={index}>{og}</th>)
         }
         console.log("header:  ", header)
         return header;
@@ -51,7 +61,7 @@ class TraceTable extends React.Component<any> {
 
     render() {
         console.log("trace table in render: " , this.traceTableStore.trace);
-        const table = this.dataToTable();
+        // const table = this.dataToTable();
         return (
           <div className="trace-table-canvas">
               <Table responsive="lg">

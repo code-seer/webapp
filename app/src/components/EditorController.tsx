@@ -27,9 +27,11 @@ class EditorController extends React.Component<any> {
         fetch(url, requestOptions)
             .then(response => response.json())
             .then(data => {
-                this.traceTableStore.data = data;
-                console.log("Server response", data)
-            });
+                console.log("Server Response: ", data.trace);
+                this.traceTableStore.setTrace(data.trace);
+            }).catch(error => {
+                console.log(error)
+        });
     }
 
     render() {

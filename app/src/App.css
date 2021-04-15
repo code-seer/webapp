@@ -63,7 +63,7 @@
   align-items: center;
 }
 .editor-container {
-  margin-right: 0;
+  margin-right: 0 !important;
 }
 
 .trace-table-placeholder span {

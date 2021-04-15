@@ -1,6 +1,7 @@
 import * as React from "react";
 import {inject, observer} from "mobx-react";
-import {TraceTableStore, UserCodeStore} from "../store/Stores";
+import Table from 'react-bootstrap/Table';
+import {TraceTableItem, TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
 @observer
@@ -12,21 +13,25 @@ class TraceTable extends React.Component<any> {
         const table = (
             <ul>
                 {
-                    this.traceTableStore.data.trace.map((event, index) =>
-                        <ul key={index}>
-                            <li>Event: {event.event}</li>
-                            <li>Function: {event.func_name}</li>
-                            <li>Line No: {event.line}</li>
-                            <li>Globals: </li>
-                            <li>Heap: {Object.keys(event.heap).map((heapKey, index) => {
-                                return <ul key={heapKey}>
-                                    {event.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}
-                                </ul>
-                                }
-                            )}</li>
-                            <li>Ordered Globals: {event.ordered_globals.map(og => <ul><li>{og}</li></ul>)} </li>
-                            <li>Output: {event.stdout}</li>
-                        </ul>)
+                    this.traceTableStore.trace?.map((trace: TraceTableItem, index: number) => {
+                        return <ul key={index}>
+                            <li>Event: {trace.event}</li>
+                            <li>Function: {trace.func_name}</li>
+                            <li>Line No: {trace.line}</li>
+                            <li>Globals: {trace.globals}</li>
+                            <li>Heap: {trace.heap}</li>
+                            {/*<li>Heap: {Object.keys(trace.heap).map((heapKey, index) => {*/}
+                            {/*        return <ul key={heapKey}>*/}
+                            {/*            {trace.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}*/}
+                            {/*        </ul>*/}
+                            {/*    }*/}
+                            {/*)}</li>*/}
+                            <li>Ordered Globals: {trace.ordered_globals?.map(og => <ul>
+                                <li>{og}</li>
+                            </ul>)} </li>
+                            <li>Output: {trace.stdout}</li>
+                        </ul>;
+                    })
 
                 }
             </ul>
@@ -34,14 +39,87 @@ class TraceTable extends React.Component<any> {
         return table;
     }
 
+    getTableHeader = (index: number) => {
+        let header: any[] | undefined;
+        if (this.traceTableStore.trace) {
+            const orderGlobals = this.traceTableStore.trace[index].ordered_globals
+            header = orderGlobals?.map(og => <th key={index}>{og}</th>)
+        }
+        console.log("header:  ", header)
+        return header;
+    }
+
     render() {
-        console.log(this.traceTableStore.data.trace);
+        console.log("trace table in render: " , this.traceTableStore.trace);
         const table = this.dataToTable();
         return (
           <div className="trace-table-canvas">
+              <Table responsive="lg">
+                  <thead>
+                  <tr>
+                      {this.getTableHeader(0)}
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <td>1</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                  </tr>
+                  <tr>
+                      <td>2</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                  </tr>
+                  <tr>
+                      <td>3</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                  </tr>
+                  </tbody>
+              </Table>
               <div className="trace-table-placeholder">
-                  { table }
-                  {!this.traceTableStore.data && <span>No data to visualize</span> }
+                  {/*<ul>*/}
+                  {/*    {*/}
+                  {/*        this.traceTableStore.trace?.map((trace: TraceTableItem, index: number) => {*/}
+                  {/*            return <ul key={index}>*/}
+                  {/*                <li>Event: {trace.event}</li>*/}
+                  {/*                <li>Function: {trace.func_name}</li>*/}
+                  {/*                <li>Line No: {trace.line}</li>*/}
+                  {/*                /!*<li>Globals: {Object.keys(trace.globals).map((globalKey, index) => {*!/*/}
+                  {/*                /!*        return <ul key={globalKey}>*!/*/}
+                  {/*                /!*            {trace.globals[globalKey].map((item, idx) => <li key={idx}>{item}</li>)}*!/*/}
+                  {/*                /!*        </ul>*!/*/}
+                  {/*                /!*    }*!/*/}
+                  {/*                /!*)}</li>*!/*/}
+                  {/*                <li>Heap: {Object.keys(trace.heap).map((heapKey, index) => {*/}
+                  {/*                        return <ul key={heapKey}>*/}
+                  {/*                            {trace.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}*/}
+                  {/*                        </ul>*/}
+                  {/*                    }*/}
+                  {/*                )}</li>*/}
+                  {/*                <li>Ordered Globals: {trace.ordered_globals?.map(og => <ul>*/}
+                  {/*                    <li>{og}</li>*/}
+                  {/*                </ul>)} </li>*/}
+                  {/*                <li>Output: {trace.stdout}</li>*/}
+                  {/*            </ul>;*/}
+                  {/*        })*/}
+
+                  {/*    }*/}
+                  {/*</ul>*/}
+                  {/*{!this.traceTableStore.trace && <span>No data to visualize</span> }*/}
               </div>
           </div>
         );

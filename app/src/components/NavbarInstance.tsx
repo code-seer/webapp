@@ -23,7 +23,7 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
                 {/*</Nav>*/}
 
                 <Container>
-                    <p className="Navbar-text-center mt-4 mb-4">Code Visualizer</p>
+                    <span className="Navbar-text-center">Code Visualizer</span>
                 </Container>
                 {/*<Form inline>*/}
                 {/*    <FormControl type="text" placeholder="Search" className="mr-sm-2" />*/}

@@ -27,7 +27,7 @@ class App extends React.Component<any, any> {
       const { activeKey } = this.state;
 
     return (
-        <div className="nav-wrapper">
+        <div className="app">
             <NavBarInstance activeKey={activeKey} onSelect={this.handleSelect} />
             <Row className="editor-container">
                 <Col xs={12} md={4}>

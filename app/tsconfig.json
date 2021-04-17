@@ -10,6 +10,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": true,
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,

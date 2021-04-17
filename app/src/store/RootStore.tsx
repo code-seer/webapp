@@ -5,8 +5,8 @@ export default class RootStore {
     traceTableStore: TraceTableStore;
 
     constructor() {
-        this.userCodeStore = new UserCodeStore(this);
-        this.traceTableStore = new TraceTableStore(this);
+        this.userCodeStore = new UserCodeStore();
+        this.traceTableStore = new TraceTableStore();
     }
 }
 

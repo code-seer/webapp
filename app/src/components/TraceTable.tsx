@@ -53,7 +53,7 @@ class TraceTable extends React.Component<any> {
             orderGlobals.push("Line");
             orderGlobals.push(...Array.from(globals.values()).sort());
             orderGlobals.push("Output")
-            header = orderGlobals?.map((og: any) => <th key={index}>{og}</th>)
+            header = orderGlobals?.map((og: any) => <th key={og}>{og}</th>)
         }
         console.log("header:  ", header)
         return header;

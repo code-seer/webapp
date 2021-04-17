@@ -1,5 +1,4 @@
-import {observable, action} from 'mobx';
-import RootStore from "./RootStore";
+import {observable, action, makeObservable} from 'mobx';
 
 export interface TraceTableItem {
     event: string | undefined,
@@ -13,24 +12,22 @@ export interface TraceTableItem {
 }
 
 export class UserCodeStore {
-    rootStore: RootStore
 
     @observable
     code: string = `# Python 2.7\nprint "Hello, World!"`;
 
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore
+    constructor() {
+        makeObservable(this);
     }
 }
 
 export class TraceTableStore {
-    rootStore: RootStore
 
     @observable
     trace: TraceTableItem[]  | undefined
 
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore
+    constructor() {
+        makeObservable(this);
     }
 
     @action

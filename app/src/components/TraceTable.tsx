@@ -59,47 +59,75 @@ class TraceTable extends React.Component<any> {
         return header;
     }
 
+    getTable = (line: number) => {
+        const table: {} = this.traceTableStore.table;
+        const sortedHeadings = Object.keys(table).sort()
+        return (
+            <Table responsive="lg">
+                <thead>
+                <tr>
+                    {sortedHeadings.map(heading => {
+                        const entry = table[heading];
+                        if (entry[line]) {
+                            return <th key={heading}>{heading}</th>
+                        }
+                    })}
+                </tr>
+                </thead>
+                <tbody>
+                {sortedHeadings.map(heading => {
+                    const entry = table[heading];
+                    if (entry[line]) {
+                        return <td key={entry[line].toString()}>{entry[line]}</td>
+                    }
+                })}
+                </tbody>
+            </Table>
+        );
+    }
+
     render() {
         console.log("trace table in render: " , this.traceTableStore.trace);
         // const table = this.dataToTable();
         return (
           <div className="trace-table-canvas">
-              <Table responsive="lg">
-                  <thead>
-                  <tr>
-                      {this.getTableHeader(0)}
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <td>1</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                  </tr>
-                  <tr>
-                      <td>2</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                  </tr>
-                  <tr>
-                      <td>3</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                  </tr>
-                  </tbody>
-              </Table>
+              {this.getTable(1)}
+              {/*<Table responsive="lg">*/}
+              {/*    <thead>*/}
+              {/*    <tr>*/}
+              {/*        {this.getTableHeader(0)}*/}
+              {/*    </tr>*/}
+              {/*    </thead>*/}
+              {/*    <tbody>*/}
+              {/*    <tr>*/}
+              {/*        <td>1</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*    </tr>*/}
+              {/*    <tr>*/}
+              {/*        <td>2</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*    </tr>*/}
+              {/*    <tr>*/}
+              {/*        <td>3</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*        <td>Table cell</td>*/}
+              {/*    </tr>*/}
+              {/*    </tbody>*/}
+              {/*</Table>*/}
               <div className="trace-table-placeholder">
                   {/*<ul>*/}
                   {/*    {*/}

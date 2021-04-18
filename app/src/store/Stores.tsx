@@ -1,4 +1,4 @@
-import {observable, action, makeObservable} from 'mobx';
+import {observable, action, makeObservable, computed} from 'mobx';
 
 export interface TraceTableItem {
     event: string | undefined,
@@ -26,6 +26,25 @@ export class TraceTableStore {
     @observable
     trace: TraceTableItem[]  | undefined
 
+    @observable
+    table: {} = {
+        Heading1: {
+            1: "abc",
+            2: "abc2",
+            5: "abc4"
+        },
+        Heading2: {
+            1: "xyz",
+        },
+        Heading3: {
+            5: "xyz2"
+        },
+        Output: {
+            2: "hello",
+            4: "world",
+        }
+    };
+
     constructor() {
         makeObservable(this);
     }
@@ -35,4 +54,5 @@ export class TraceTableStore {
         console.log("updating trace: ", newTrace);
         this.trace = newTrace;
     }
+
 }

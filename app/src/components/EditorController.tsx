@@ -34,6 +34,14 @@ class EditorController extends React.Component<any> {
         });
     }
 
+    onUpArrow = () => {
+        this.traceTableStore.decrementLineNum();
+    }
+
+    onDownArrow = () => {
+        this.traceTableStore.incrementLineNum();
+    }
+
     render() {
         return (
             <div>
@@ -44,12 +52,14 @@ class EditorController extends React.Component<any> {
                     </Button>{' '}
                 </Row>
                 <Row className="ace-editor-controller up">
-                    <Button className="ace-editor-code-run-btn" variant="warning">
+                    <Button className="ace-editor-code-run-btn" variant="warning"
+                            onClick={() => {this.onUpArrow()}}>
                         <FontAwesomeIcon icon={faChevronUp} fixedWidth />
                     </Button>{' '}
                 </Row>
                 <Row className="ace-editor-controller down">
-                    <Button className="ace-editor-code-run-btn" variant="warning">
+                    <Button className="ace-editor-code-run-btn" variant="warning"
+                            onClick={() => {this.onDownArrow()}}>
                         <FontAwesomeIcon icon={faChevronDown} fixedWidth />
                     </Button>{' '}
                 </Row>

@@ -24,7 +24,12 @@ export class UserCodeStore {
 export class TraceTableStore {
 
     @observable
-    trace: TraceTableItem[]  | undefined
+    trace: TraceTableItem[]  | undefined;
+
+    @observable
+    currentLineNum: number = 1;
+
+    MAX_LINE_NUM = 5;
 
     @observable
     table: {} = {
@@ -42,6 +47,13 @@ export class TraceTableStore {
         Output: {
             2: "hello",
             4: "world",
+        },
+        Line: {
+            1: true,
+            2: true,
+            3: true,
+            4: true,
+            5: true
         }
     };
 
@@ -53,6 +65,22 @@ export class TraceTableStore {
     setTrace(newTrace: TraceTableItem[]) {
         console.log("updating trace: ", newTrace);
         this.trace = newTrace;
+    }
+
+    @action
+    decrementLineNum() {
+        this.currentLineNum--;
+        if (this.currentLineNum < 1) {
+            this.currentLineNum = 1;
+        }
+    }
+
+    @action
+    incrementLineNum() {
+        this.currentLineNum++;
+        if (this.currentLineNum > this.MAX_LINE_NUM) {
+            this.currentLineNum = this.MAX_LINE_NUM;
+        }
     }
 
 }

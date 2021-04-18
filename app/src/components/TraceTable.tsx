@@ -62,6 +62,8 @@ class TraceTable extends React.Component<any> {
     getTable = (line: number) => {
         const table: {} = this.traceTableStore.table;
         const sortedHeadings = Object.keys(table).sort()
+        // sortedHeadings.re
+        console.log("line number: ", line);
         return (
             <Table responsive="lg">
                 <thead>
@@ -75,12 +77,17 @@ class TraceTable extends React.Component<any> {
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
                 {sortedHeadings.map(heading => {
                     const entry = table[heading];
                     if (entry[line]) {
+                        if (heading === "Line") {
+                            return <td key={entry[line].toString()}>{line}</td>
+                        }
                         return <td key={entry[line].toString()}>{entry[line]}</td>
                     }
                 })}
+                </tr>
                 </tbody>
             </Table>
         );
@@ -88,46 +95,10 @@ class TraceTable extends React.Component<any> {
 
     render() {
         console.log("trace table in render: " , this.traceTableStore.trace);
-        // const table = this.dataToTable();
+        console.log("this.traceTableStore.currentLineNum: ", this.traceTableStore.currentLineNum);
         return (
           <div className="trace-table-canvas">
-              {this.getTable(1)}
-              {/*<Table responsive="lg">*/}
-              {/*    <thead>*/}
-              {/*    <tr>*/}
-              {/*        {this.getTableHeader(0)}*/}
-              {/*    </tr>*/}
-              {/*    </thead>*/}
-              {/*    <tbody>*/}
-              {/*    <tr>*/}
-              {/*        <td>1</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*    </tr>*/}
-              {/*    <tr>*/}
-              {/*        <td>2</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*    </tr>*/}
-              {/*    <tr>*/}
-              {/*        <td>3</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*        <td>Table cell</td>*/}
-              {/*    </tr>*/}
-              {/*    </tbody>*/}
-              {/*</Table>*/}
+              {this.getTable(this.traceTableStore.currentLineNum)}
               <div className="trace-table-placeholder">
                   {/*<ul>*/}
                   {/*    {*/}

@@ -51,11 +51,14 @@ export class TraceTableStore {
         Line: {
             1: true,
             2: true,
-            3: true,
             4: true,
             5: true
         }
     };
+
+    // All global headings
+    @observable
+    allHeadings =  ["Line", "Heading1", "Heading2", "Heading3", "Output"];
 
     constructor() {
         makeObservable(this);
@@ -82,5 +85,10 @@ export class TraceTableStore {
             this.currentLineNum = this.MAX_LINE_NUM;
         }
     }
+
+    // @computed
+    // computeAllowedHeadings() {
+    //
+    // }
 
 }

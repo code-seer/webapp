@@ -61,33 +61,65 @@ class TraceTable extends React.Component<any> {
 
     getTable = (line: number) => {
         const table: {} = this.traceTableStore.table;
-        const sortedHeadings = Object.keys(table).sort()
-        // sortedHeadings.re
-        console.log("line number: ", line);
+        // const sortedHeadings = Object.keys(table).sort()
+        // const headings = this.traceTableStore.allHeadings[line];
+        // const allHeadings = Object.keys(this.traceTableStore.allHeadings)
+        //     .filter(key => Number(key) <= this.traceTableStore.currentLineNum)
+        //     .map(key => this.traceTableStore.allHeadings[key]
+
+        const allHeadings = this.traceTableStore.allHeadings;
+        const rows = () => {
+            const validLines: any[] = Object.keys(table["Line"])
+                .sort()
+                .filter(key => Number(key) <= line);
+
+            console.log("Valide lines: ", validLines);
+            const rowsToRender: any[] = validLines.map(currRow => {
+                    let emptyRow: boolean = true;
+                    const rowKey = "row-" + currRow;
+                    console.log("=================Current Row: ", currRow);
+                    const row = <tr key={rowKey}>
+                        {
+                            allHeadings.map(heading => {
+                                const entry = table[heading];
+                                const key = heading + "-cell-" + currRow;
+                                let value = entry[currRow] === undefined ? "-" : entry[currRow];
+                                if (heading == "Line") {
+                                    value = "" + currRow;
+                                }
+                                if (value !== "-") {
+                                    emptyRow = false;
+                                }
+                                console.log("Heading: ", heading);
+                                console.log("Value: ", value);
+                                console.log("Entry: ", entry[currRow]);
+                                return <td key={key}>{value}</td>;
+                            })
+                        }
+                    </tr>
+                    if (!emptyRow) {
+                        return row;
+                    }
+                    return undefined;
+                })
+                .filter(newRow => newRow !== undefined)
+            return rowsToRender;
+        };
+
+        console.log(this.traceTableStore.allHeadings);
         return (
             <Table responsive="lg">
                 <thead>
                 <tr>
-                    {sortedHeadings.map(heading => {
-                        const entry = table[heading];
-                        if (entry[line]) {
-                            return <th key={heading}>{heading}</th>
-                        }
+                    {this.traceTableStore.allHeadings.map(heading => {
+                        return <th key={heading}>{heading}</th>
                     })}
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                {sortedHeadings.map(heading => {
-                    const entry = table[heading];
-                    if (entry[line]) {
-                        if (heading === "Line") {
-                            return <td key={entry[line].toString()}>{line}</td>
-                        }
-                        return <td key={entry[line].toString()}>{entry[line]}</td>
-                    }
-                })}
-                </tr>
+                {
+                    rows()
+                }
                 </tbody>
             </Table>
         );

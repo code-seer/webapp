@@ -1,8 +1,7 @@
 import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
-import {TraceTableItem, TraceTableStore, UserCodeStore} from "../store/Stores";
-import {set} from "mobx";
+import {TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
 @observer
@@ -10,74 +9,16 @@ class TraceTable extends React.Component<any> {
     userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
     traceTableStore: TraceTableStore = this.props.rootStore.traceTableStore;
 
-    dataToTable = () => {
-        const table = (
-            <ul>
-                {
-                    this.traceTableStore.trace?.map((trace: TraceTableItem, index: number) => {
-                        return <ul key={index}>
-                            <li>Event: {trace.event}</li>
-                            <li>Function: {trace.func_name}</li>
-                            <li>Line No: {trace.line}</li>
-                            <li>Globals: {trace.globals}</li>
-                            <li>Heap: {trace.heap}</li>
-                            {/*<li>Heap: {Object.keys(trace.heap).map((heapKey, index) => {*/}
-                            {/*        return <ul key={heapKey}>*/}
-                            {/*            {trace.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}*/}
-                            {/*        </ul>*/}
-                            {/*    }*/}
-                            {/*)}</li>*/}
-                            <li>Ordered Globals: {trace.ordered_globals?.map(og => <ul>
-                                <li>{og}</li>
-                            </ul>)} </li>
-                            <li>Output: {trace.stdout}</li>
-                        </ul>;
-                    })
-
-                }
-            </ul>
-        )
-        return table;
-    }
-
-    getTableHeader = (index: number) => {
-        let header: any[] | undefined;
-        if (this.traceTableStore.trace) {
-            const globals = new Set();
-            this.traceTableStore.trace.forEach((item: TraceTableItem) => {
-                if (item.ordered_globals) {
-                    item.ordered_globals.forEach(it => globals.add(it))
-                }
-            })
-            const orderGlobals: any[] = [];
-            orderGlobals.push("Line");
-            orderGlobals.push(...Array.from(globals.values()).sort());
-            orderGlobals.push("Output")
-            header = orderGlobals?.map((og: any) => <th key={og}>{og}</th>)
-        }
-        console.log("header:  ", header)
-        return header;
-    }
-
     getTable = (line: number) => {
         const table: {} = this.traceTableStore.table;
-        // const sortedHeadings = Object.keys(table).sort()
-        // const headings = this.traceTableStore.allHeadings[line];
-        // const allHeadings = Object.keys(this.traceTableStore.allHeadings)
-        //     .filter(key => Number(key) <= this.traceTableStore.currentLineNum)
-        //     .map(key => this.traceTableStore.allHeadings[key]
-
         const allHeadings = this.traceTableStore.allHeadings;
         const rows = () => {
-            const validLines: any[] = Object.keys(table["Line"])
+            const validLinesToRender: any[] = Object.keys(table["Line"])
                 .sort()
                 .filter(key => Number(key) <= line);
-
-            console.log("Valide lines: ", validLines);
-            const rowsToRender: any[] = validLines.map(currRow => {
+            const rowsToRender: any[] = validLinesToRender.map(currRow => {
                     let emptyRow: boolean = true;
                     const rowKey = "row-" + currRow;
-                    console.log("=================Current Row: ", currRow);
                     const row = <tr key={rowKey}>
                         {
                             allHeadings.map(heading => {
@@ -90,9 +31,6 @@ class TraceTable extends React.Component<any> {
                                 if (value !== "-") {
                                     emptyRow = false;
                                 }
-                                console.log("Heading: ", heading);
-                                console.log("Value: ", value);
-                                console.log("Entry: ", entry[currRow]);
                                 return <td key={key}>{value}</td>;
                             })
                         }
@@ -106,7 +44,6 @@ class TraceTable extends React.Component<any> {
             return rowsToRender;
         };
 
-        console.log(this.traceTableStore.allHeadings);
         return (
             <Table responsive="lg">
                 <thead>

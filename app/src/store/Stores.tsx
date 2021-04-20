@@ -60,6 +60,9 @@ export class TraceTableStore {
     @observable
     allHeadings =  ["Line", "Heading1", "Heading2", "Heading3", "Output"];
 
+    @observable
+    validLineNums = [1, 2, 4, 5];
+
     constructor() {
         makeObservable(this);
     }
@@ -73,22 +76,28 @@ export class TraceTableStore {
     @action
     decrementLineNum() {
         this.currentLineNum--;
-        if (this.currentLineNum < 1) {
-            this.currentLineNum = 1;
+        // if currentLineNum is not a valid line number, decrement
+        // until we arrive at a number that is valid
+        while (!this.validLineNums.includes(this.currentLineNum)) {
+            this.currentLineNum--;
+            if (this.currentLineNum < 0) {
+                this.currentLineNum = 0;
+                break;
+            }
         }
+
     }
 
     @action
     incrementLineNum() {
         this.currentLineNum++;
-        if (this.currentLineNum > this.MAX_LINE_NUM) {
-            this.currentLineNum = this.MAX_LINE_NUM;
+        while (!this.validLineNums.includes(this.currentLineNum)) {
+            this.currentLineNum++;
+            if (this.currentLineNum > this.MAX_LINE_NUM) {
+                this.currentLineNum = this.MAX_LINE_NUM;
+                break;
+            }
         }
+
     }
-
-    // @computed
-    // computeAllowedHeadings() {
-    //
-    // }
-
 }

@@ -72,6 +72,14 @@
   color: #4e555b;
   opacity: 0.4;
 }
+.learnet-table {
+  text-align: center;
+}
+
+.cell-highlighted {
+  background: #ffc1086b;
+  font-weight: 700;
+}
 
 .App-link {
   color: #61dafb;

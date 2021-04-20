@@ -27,7 +27,7 @@ export class TraceTableStore {
     trace: TraceTableItem[]  | undefined;
 
     @observable
-    currentLineNum: number = 1;
+    currentLineNum: number = 0;
 
     MAX_LINE_NUM = 5;
 
@@ -35,11 +35,10 @@ export class TraceTableStore {
     table: {} = {
         Heading1: {
             1: "abc",
-            2: "abc2",
             5: "abc4"
         },
         Heading2: {
-            1: "xyz",
+            2: "xyz",
         },
         Heading3: {
             5: "xyz2"
@@ -69,7 +68,6 @@ export class TraceTableStore {
 
     @action
     setTrace(newTrace: TraceTableItem[]) {
-        console.log("updating trace: ", newTrace);
         this.trace = newTrace;
     }
 

@@ -6,8 +6,18 @@ import {TraceTableStore, UserCodeStore} from "../store/Stores";
 @inject('rootStore')
 @observer
 class TraceTable extends React.Component<any> {
-    userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
-    traceTableStore: TraceTableStore = this.props.rootStore.traceTableStore;
+    private userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
+    private traceTableStore: TraceTableStore = this.props.rootStore.traceTableStore;
+    state = {
+        intervalId: undefined,
+        highlightCell: true
+    }
+
+    componentWillUnmount() {
+        if (this.state.intervalId) {
+            clearInterval(this.state.intervalId)
+        }
+    }
 
     getTable = (line: number) => {
         const table: {} = this.traceTableStore.table;
@@ -25,13 +35,22 @@ class TraceTable extends React.Component<any> {
                                 const entry = table[heading];
                                 const key = heading + "-cell-" + currRow;
                                 let value = entry[currRow] === undefined ? "-" : entry[currRow];
+                                let highlightCell = true;
                                 if (heading == "Line") {
                                     value = "" + currRow;
+                                    highlightCell = false;
                                 }
                                 if (value !== "-") {
                                     emptyRow = false;
                                 }
-                                return <td key={key}>{value}</td>;
+                                if (highlightCell && currRow == line && value !== "-") {
+                                    return <td key={key} id={key}
+                                               className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
+                                }
+                                else {
+                                    return <td key={key} id={key}>{value}</td>;
+                                }
+
                             })
                         }
                     </tr>
@@ -45,7 +64,7 @@ class TraceTable extends React.Component<any> {
         };
 
         return (
-            <Table responsive="lg">
+            <Table responsive="lg" className="learnet-table">
                 <thead>
                 <tr>
                     {this.traceTableStore.allHeadings.map(heading => {
@@ -67,38 +86,12 @@ class TraceTable extends React.Component<any> {
         console.log("this.traceTableStore.currentLineNum: ", this.traceTableStore.currentLineNum);
         return (
           <div className="trace-table-canvas">
-              {this.getTable(this.traceTableStore.currentLineNum)}
+              {this.traceTableStore.table && this.getTable(this.traceTableStore.currentLineNum)}
+              {!this.traceTableStore.table &&
               <div className="trace-table-placeholder">
-                  {/*<ul>*/}
-                  {/*    {*/}
-                  {/*        this.traceTableStore.trace?.map((trace: TraceTableItem, index: number) => {*/}
-                  {/*            return <ul key={index}>*/}
-                  {/*                <li>Event: {trace.event}</li>*/}
-                  {/*                <li>Function: {trace.func_name}</li>*/}
-                  {/*                <li>Line No: {trace.line}</li>*/}
-                  {/*                /!*<li>Globals: {Object.keys(trace.globals).map((globalKey, index) => {*!/*/}
-                  {/*                /!*        return <ul key={globalKey}>*!/*/}
-                  {/*                /!*            {trace.globals[globalKey].map((item, idx) => <li key={idx}>{item}</li>)}*!/*/}
-                  {/*                /!*        </ul>*!/*/}
-                  {/*                /!*    }*!/*/}
-                  {/*                /!*)}</li>*!/*/}
-                  {/*                <li>Heap: {Object.keys(trace.heap).map((heapKey, index) => {*/}
-                  {/*                        return <ul key={heapKey}>*/}
-                  {/*                            {trace.heap[heapKey].map((item, idx) => <li key={idx}>{item}</li>)}*/}
-                  {/*                        </ul>*/}
-                  {/*                    }*/}
-                  {/*                )}</li>*/}
-                  {/*                <li>Ordered Globals: {trace.ordered_globals?.map(og => <ul>*/}
-                  {/*                    <li>{og}</li>*/}
-                  {/*                </ul>)} </li>*/}
-                  {/*                <li>Output: {trace.stdout}</li>*/}
-                  {/*            </ul>;*/}
-                  {/*        })*/}
-
-                  {/*    }*/}
-                  {/*</ul>*/}
-                  {/*{!this.traceTableStore.trace && <span>No data to visualize</span> }*/}
+                  <span>No data to visualize</span>
               </div>
+              }
           </div>
         );
     }

@@ -43,23 +43,25 @@ class EditorController extends React.Component<any> {
     }
 
     render() {
+        const codeEditorIsEmpty = this.userCodeStore.code.length === 0;
+        const tableHasNoData = Object.keys(this.traceTableStore.table).length > 0 ? false : true;
         return (
             <div>
                 <Row className="ace-editor-controller run">
                     <Button className="ace-editor-code-run-btn" variant="success"
-                            onClick={() => {this.onRun()}}>
+                            onClick={() => {this.onRun()}} disabled={codeEditorIsEmpty}>
                         <FontAwesomeIcon icon={faPlay} fixedWidth />
                     </Button>{' '}
                 </Row>
                 <Row className="ace-editor-controller up">
                     <Button className="ace-editor-code-run-btn" variant="warning"
-                            onClick={() => {this.onUpArrow()}}>
+                            onClick={() => {this.onUpArrow()}} disabled={tableHasNoData}>
                         <FontAwesomeIcon icon={faChevronUp} fixedWidth />
                     </Button>{' '}
                 </Row>
                 <Row className="ace-editor-controller down">
                     <Button className="ace-editor-code-run-btn" variant="warning"
-                            onClick={() => {this.onDownArrow()}}>
+                            onClick={() => {this.onDownArrow()}} disabled={tableHasNoData}>
                         <FontAwesomeIcon icon={faChevronDown} fixedWidth />
                     </Button>{' '}
                 </Row>

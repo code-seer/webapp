@@ -32,6 +32,7 @@ export class TraceTableStore {
     MAX_LINE_NUM = 5;
 
     @observable
+    tables = {};
     table: {} = {
         Heading1: {
             1: "abc",

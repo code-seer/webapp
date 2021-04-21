@@ -33,7 +33,7 @@ class App extends React.Component<any, any> {
                 <Col xs={12} md={4}>
                     <AceEditor/>
                 </Col>
-                <Col xs md={1}>
+                <Col xs md={1} className="ace-editor-controller-container">
                     <EditorController/>
                 </Col>
                 <Col xs={12} md={7}>

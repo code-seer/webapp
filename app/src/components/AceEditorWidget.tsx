@@ -155,10 +155,10 @@ class AceEditorWidget extends React.Component<any> {
                 <AceEditor
                     placeholder={this.state.placeholder}
                     height={'90vh'}
-                    width={'650px'}
+                    width={'100%'}
                     mode={this.state.mode}
                     theme={this.state.theme}
-                    name="editor"
+                    name="ace-editor"
                     onLoad={this.onLoad}
                     onChange={this.onChange}
                     onSelectionChange={this.onSelectionChange}

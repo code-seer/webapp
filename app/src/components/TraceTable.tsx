@@ -84,7 +84,7 @@ class TraceTable extends React.Component<any> {
     render() {
         console.log("trace table in render: " , this.traceTableStore.trace);
         console.log("this.traceTableStore.currentLineNum: ", this.traceTableStore.currentLineNum);
-        const tableHasData = Object.keys(this.traceTableStore.table).length > 0 ? true : false;
+        const tableHasData = this.traceTableStore.allHeadings.length > 0;
         return (
           <div className="trace-table-canvas">
               {tableHasData && this.getTable(this.traceTableStore.currentLineNum)}

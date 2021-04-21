@@ -47,7 +47,8 @@ export class TraceTableStore {
     @observable
     currentLineNum: number = 1;
 
-    MAX_LINE_NUM = 5;
+    @observable
+    maxLineNum = 0;
 
     @observable
     tables = {};
@@ -76,7 +77,7 @@ export class TraceTableStore {
 
     // All global headings
     @observable
-    allHeadings =  ["Line", "Heading1", "Heading2", "Heading3", "Output"];
+    allHeadings: any[] =  [];
 
     @observable
     validLineNums = [1, 2, 4, 5];
@@ -88,7 +89,23 @@ export class TraceTableStore {
     @action
     setTrace(newTrace: TraceTableItem[]) {
         this.trace = newTrace;
-        this.allHeadings = this.parseHeadings(newTrace);
+        this.setHeadings();
+        this.setMaxLineNum();
+    }
+
+    /**
+     * Set the maximum line number
+     */
+    @action
+    setMaxLineNum() {
+        if (this.trace) {
+            const lineNum = this.trace[this.trace.length-1].line;
+            if (lineNum) {
+                this.maxLineNum = lineNum;
+            } else {
+                this.maxLineNum = 0;
+            }
+        }
     }
 
     @action
@@ -102,13 +119,38 @@ export class TraceTableStore {
     @action
     incrementLineNum() {
         this.currentLineNum++;
-        if (this.currentLineNum > this.MAX_LINE_NUM) {
-            this.currentLineNum = this.MAX_LINE_NUM;
+        if (this.currentLineNum > this.maxLineNum) {
+            this.currentLineNum = this.maxLineNum;
         }
-
     }
 
-    private parseHeadings(newTrace: TraceTableItem[]) {
-        return [];
+    /**
+     * Parse out all unique variable names to form table headings.
+     *
+     * @param newTrace
+     */
+    @action
+    setHeadings() {
+        const getKeys = (attributes) => {
+            const keys = new Set();
+            if (attributes) {
+                Object.keys(attributes).map(key => {
+                    keys.add(key);
+                    return undefined;
+                })
+            }
+            return keys;
+        }
+        const headings = new Set();
+        this.trace?.map(it => {
+            getKeys(it.globals).forEach(headings.add, headings);
+        })
+        const result: any[] = [];
+        if (headings.size > 0) {
+            result.push("Line");
+            result.push(...Array.from(headings.values()).sort());
+            result.push("Output");
+        }
+        return result;
     }
 }

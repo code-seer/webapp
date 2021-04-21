@@ -57,7 +57,7 @@ class EditorController extends React.Component<any> {
 
     render() {
         const codeEditorIsEmpty = this.userCodeStore.code.length === 0;
-        const tableHasNoData = Object.keys(this.traceTableStore.table).length > 0 ? false : true;
+        const tableHasNoData = !this.traceTableStore.tableHasData;
         return (
             <div>
                 <Row className="ace-editor-controller run">

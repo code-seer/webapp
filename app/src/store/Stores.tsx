@@ -75,6 +75,9 @@ export class TraceTableStore {
         }
     };
 
+    @observable
+    tableHasData: boolean = false;
+
     // All global headings
     @observable
     allHeadings: any[] =  [];
@@ -91,6 +94,14 @@ export class TraceTableStore {
         this.trace = newTrace;
         this.setHeadings();
         this.setMaxLineNum();
+        this.setTableHasData();
+    }
+
+    @action
+    setTableHasData() {
+        if (this.allHeadings.length > 0) {
+            this.tableHasData = true;
+        }
     }
 
     /**

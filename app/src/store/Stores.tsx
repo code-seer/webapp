@@ -23,6 +23,9 @@ export class UserCodeStore {
     @observable
     aceEditorSession: any | undefined;
 
+    @observable
+    resultPending: boolean = false;
+
     constructor() {
         makeObservable(this);
     }
@@ -36,6 +39,11 @@ export class UserCodeStore {
     @action
     setAceEditorSession(session: any) {
         this.aceEditorSession = session;
+    }
+
+    @action
+    setResultPending() {
+        this.resultPending = !this.resultPending;
     }
 }
 

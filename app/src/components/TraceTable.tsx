@@ -1,6 +1,7 @@
 import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
+import Spinner from 'react-bootstrap/Spinner'
 import {TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
@@ -90,7 +91,13 @@ class TraceTable extends React.Component<any> {
               {tableHasData && this.getTable(this.traceTableStore.currentLineNum)}
               {!tableHasData &&
               <div className="trace-table-placeholder">
-                  <span>No data to visualize</span>
+                  { this.userCodeStore.resultPending &&
+                  <Spinner animation="border" variant="warning" />
+                  }
+                  {
+                      !this.userCodeStore.resultPending &&
+                      <span>No data to visualize</span>
+                  }
               </div>
               }
           </div>

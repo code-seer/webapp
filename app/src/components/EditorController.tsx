@@ -31,11 +31,13 @@ class EditorController extends React.Component<any> {
         };
         console.log(body);
         console.log(requestOptions);
+        this.userCodeStore.setResultPending();
         fetch(url, requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log("Server Response: ", data.trace);
                 this.traceTableStore.setTrace(data.trace);
+                this.userCodeStore.setResultPending();
             }).catch(error => {
                 console.log(error)
         });

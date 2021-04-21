@@ -14,7 +14,7 @@ export interface TraceTableItem {
 export class UserCodeStore {
 
     @observable
-    code: string = `# Please type your code here"`;
+    code: string = `# Please type your code here`;
 
     @observable
     language: string = "python27";

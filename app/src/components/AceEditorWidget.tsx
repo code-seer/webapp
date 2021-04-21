@@ -3,6 +3,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 import {observer, inject} from 'mobx-react';
+import Form from 'react-bootstrap/Form'
 
 
 import "ace-builds/src-noconflict/mode-jsx";
@@ -27,8 +28,16 @@ const languages = [
 ];
 
 const languageMap = {
-    "python": "Python 2.7",
-}
+    "python27": "Python 2.7",
+    "python37": "Python 3.7",
+    "java": "Java"
+};
+const reverseLanguageMap = {};
+Object.keys(languageMap).map(languageKey => {
+    reverseLanguageMap[languageMap[languageKey]] = languageKey;
+    return undefined;
+});
+
 
 const themes = [
     "monokai",
@@ -61,7 +70,7 @@ class AceEditorWidget extends React.Component<any> {
         mode: "python",
         enableBasicAutocompletion: false,
         enableLiveAutocompletion: false,
-        fontSize: 18,
+        fontSize: 15,
         showGutter: true,
         showPrintMargin: true,
         highlightActiveLine: true,
@@ -78,6 +87,12 @@ class AceEditorWidget extends React.Component<any> {
         this.setState({
             value: newValue
         });
+    }
+
+    onLanguageSelect = (event: any) => {
+        event.preventDefault();
+        this.userCodeStore.setLanguage(reverseLanguageMap[event.target.value]);
+
     }
 
     onSelectionChange = (newValue: any, event: any) => {
@@ -121,8 +136,22 @@ class AceEditorWidget extends React.Component<any> {
     }
 
     render() {
+        const variant = "Info";
         return (
             <div className="ace-editor">
+                <div className="ace-dropdown">
+                    <Form>
+                        <Form.Group controlId="languageDropdownForm">
+                            {/*<Form.Label>Example select</Form.Label>*/}
+                            <Form.Control as="select" custom onChange={this.onLanguageSelect}>
+                                {
+                                    Object.keys(languageMap).map(language =>
+                                        <option key={language}>{languageMap[language]}</option>)
+                                }
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>
+                </div>
                 <AceEditor
                     placeholder={this.state.placeholder}
                     height={'90vh'}
@@ -152,6 +181,8 @@ class AceEditorWidget extends React.Component<any> {
             </div>
         );
     }
+
+
 }
 
 export default AceEditorWidget;

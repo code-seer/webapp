@@ -80,6 +80,12 @@
   background: #ffc1086b;
   font-weight: 700;
 }
+.ace-dropdown {
+  /*background: red;*/
+  width: 28%;
+  padding-left: 10px;
+  /*padding-bottom: 10px;*/
+}
 
 .App-link {
   color: #61dafb;

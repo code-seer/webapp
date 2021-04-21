@@ -14,10 +14,19 @@ export interface TraceTableItem {
 export class UserCodeStore {
 
     @observable
-    code: string = `# Python 2.7\nprint "Hello, World!"`;
+    code: string = `# Please type your code here"`;
+
+    @observable
+    language: string = "python27";
 
     constructor() {
         makeObservable(this);
+    }
+
+    @action
+    setLanguage(language: string) {
+        this.language = language;
+        console.log("New language: ", this.language);
     }
 }
 

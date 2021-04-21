@@ -30,8 +30,8 @@ const languages = [
 
 const languageMap = {
     "python27": "Python 2.7",
-    "python37": "Python 3.7",
-    "java": "Java"
+    // "python37": "Python 3.7",
+    // "java": "Java"
 };
 const reverseLanguageMap = {};
 Object.keys(languageMap).map(languageKey => {

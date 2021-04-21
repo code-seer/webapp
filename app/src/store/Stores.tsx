@@ -4,17 +4,18 @@ export interface TraceTableItem {
     event: string | undefined,
     func_name: string | undefined,
     globals: {},
-    heap: {},
     line: number | undefined,
-    ordered_globals: [] | undefined,
-    stack_locals: [] | undefined,
+    locals: {},
     stdout: string | undefined
 }
 
 export class UserCodeStore {
 
     @observable
-    code: string = `# Please type your code here`;
+    code: string = `# Please type your code here
+# Limitations:
+# \t- Object Oriented Programming not supported
+# \t- Function calls are not supported`;
 
     @observable
     language: string = "python27";
@@ -87,6 +88,7 @@ export class TraceTableStore {
     @action
     setTrace(newTrace: TraceTableItem[]) {
         this.trace = newTrace;
+        this.allHeadings = this.parseHeadings(newTrace);
     }
 
     @action
@@ -104,5 +106,9 @@ export class TraceTableStore {
             this.currentLineNum = this.MAX_LINE_NUM;
         }
 
+    }
+
+    private parseHeadings(newTrace: TraceTableItem[]) {
+        return [];
     }
 }

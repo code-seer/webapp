@@ -44,7 +44,7 @@ export class TraceTableStore {
     trace: TraceTableItem[]  | undefined;
 
     @observable
-    currentLineNum: number = 0;
+    currentLineNum: number = 1;
 
     MAX_LINE_NUM = 5;
 
@@ -92,27 +92,16 @@ export class TraceTableStore {
     @action
     decrementLineNum() {
         this.currentLineNum--;
-        // if currentLineNum is not a valid line number, decrement
-        // until we arrive at a number that is valid
-        while (!this.validLineNums.includes(this.currentLineNum)) {
-            this.currentLineNum--;
-            if (this.currentLineNum < 0) {
-                this.currentLineNum = 0;
-                break;
-            }
+        if (this.currentLineNum < 0) {
+            this.currentLineNum = 0;
         }
-
     }
 
     @action
     incrementLineNum() {
         this.currentLineNum++;
-        while (!this.validLineNums.includes(this.currentLineNum)) {
-            this.currentLineNum++;
-            if (this.currentLineNum > this.MAX_LINE_NUM) {
-                this.currentLineNum = this.MAX_LINE_NUM;
-                break;
-            }
+        if (this.currentLineNum > this.MAX_LINE_NUM) {
+            this.currentLineNum = this.MAX_LINE_NUM;
         }
 
     }

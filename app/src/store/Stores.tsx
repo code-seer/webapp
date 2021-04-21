@@ -19,6 +19,9 @@ export class UserCodeStore {
     @observable
     language: string = "python27";
 
+    @observable
+    aceEditorSession: any | undefined;
+
     constructor() {
         makeObservable(this);
     }
@@ -27,6 +30,11 @@ export class UserCodeStore {
     setLanguage(language: string) {
         this.language = language;
         console.log("New language: ", this.language);
+    }
+
+    @action
+    setAceEditorSession(session: any) {
+        this.aceEditorSession = session;
     }
 }
 

@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form'
 
 import "ace-builds/src-noconflict/mode-jsx";
 import {UserCodeStore} from "../store/Stores";
+import ReactAce from "react-ace";
 const languages = [
     "javascript",
     "java",
@@ -63,6 +64,7 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 @observer
 class AceEditorWidget extends React.Component<any> {
     userCodeStore: UserCodeStore = this.props.rootStore.userCodeStore;
+    aceEditorSessionRef = React.createRef<ReactAce>();
     state = {
         value: this.userCodeStore.code,
         placeholder: "",
@@ -78,8 +80,14 @@ class AceEditorWidget extends React.Component<any> {
         showLineNumbers: true
     };
 
+    componentDidMount() {
+        if (this.aceEditorSessionRef.current) {
+            this.userCodeStore.setAceEditorSession(this.aceEditorSessionRef.current.editor)
+        }
+    }
+
     onLoad = () => {
-        // console.log("i've loaded");
+        // console.log("I've loaded")
     }
     onChange = (newValue: any) => {
         this.userCodeStore.code = newValue;
@@ -153,6 +161,7 @@ class AceEditorWidget extends React.Component<any> {
                     </Form>
                 </div>
                 <AceEditor
+                    ref={this.aceEditorSessionRef}
                     placeholder={this.state.placeholder}
                     height={'90vh'}
                     width={'100%'}

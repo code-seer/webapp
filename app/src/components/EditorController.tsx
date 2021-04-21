@@ -42,11 +42,18 @@ class EditorController extends React.Component<any> {
     }
 
     onUpArrow = () => {
+        console.log("Ace editor sessin: ", this.userCodeStore.aceEditorSession);
         this.traceTableStore.decrementLineNum();
+        if (this.userCodeStore.aceEditorSession) {
+            this.userCodeStore.aceEditorSession.gotoLine(this.traceTableStore.currentLineNum, 0, true);
+        }
     }
 
     onDownArrow = () => {
         this.traceTableStore.incrementLineNum();
+        if (this.userCodeStore.aceEditorSession) {
+            this.userCodeStore.aceEditorSession.gotoLine(this.traceTableStore.currentLineNum, 0, true);
+        }
     }
 
     render() {

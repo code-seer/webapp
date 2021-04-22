@@ -9,6 +9,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import Row from "react-bootstrap/Row";
+import {configs} from "../util/config";
 
 interface NavBarInstanceProps {
     onSelect: any,
@@ -49,10 +50,10 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
     handleFeedbackSubmit = () => {
         const body = {
             name: this.state.feedbackName,
-            body: this.state.feedbackBody,
+            feedback: this.state.feedbackBody,
             email: this.state.feedbackEmail
         };
-        const url = "http://localhost:5000/feedback";
+        const url =  `${configs.scheme}://${configs.host}:${configs.port}/${configs.urls.feedback}`;
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -64,7 +65,6 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
             }).catch(error => {
             console.log(error)
         });
-        console.log("Feedback: ", body);
         this.setState({show: false});
     }
 

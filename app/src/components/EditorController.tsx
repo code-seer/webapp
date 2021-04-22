@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faChevronDown, faPlay } from "@fortawesome/free-solid-svg-icons";
 import {inject, observer} from "mobx-react";
 import {TraceTableStore, UserCodeStore} from "../store/Stores";
+import {configs} from "../util/config";
 
 @inject('rootStore')
 @observer
@@ -17,11 +18,10 @@ class EditorController extends React.Component<any> {
     }
 
     onRun = () => {
-        const url = "http://localhost:5000/visualizer";
+        const url =  `${configs.scheme}://${configs.host}:${configs.port}/${configs.urls.visualizer}`;
         const body = {
             "language": this.userCodeStore.language,
             "user_code": this.encodedUserCode(),
-            // "user_code": "aW5wdXQgPSAnSm9obixEb2UsMTk4NCw0LDEsbWFsZScKCnRva2VucyA9IGlucHV0LnNwbGl0KCcsJykKZmlyc3ROYW1lID0gdG9rZW5zWzBdCmxhc3ROYW1lID0gdG9rZW5zWzFdCmJpcnRoZGF0ZSA9IChpbnQodG9rZW5zWzJdKSwgaW50KHRva2Vuc1szXSksIGludCh0b2tlbnNbNF0pKQppc01hbGUgPSAodG9rZW5zWzVdID09ICdtYWxlJykKCnByaW50KCdIaSAnICsgZmlyc3ROYW1lICsgJyAnICsgbGFzdE5hbWUgKyA1KQ=="
         };
 
         const requestOptions = {

@@ -6,6 +6,7 @@ export interface TraceTableItem {
     globals: {},
     line: number,
     locals: {},
+    exception_msg: string | undefined,
     stdout: string | undefined
 }
 
@@ -71,7 +72,10 @@ export class TraceTableStore {
     minLineNumIndex = 0;
 
     @observable
-    exceptionLineNuM: number = 0;
+    exceptionLineNumIndex: number = 0;
+
+    @observable
+    exceptionMessage: string | undefined;
 
     @observable
     table: {} = {};
@@ -98,6 +102,22 @@ export class TraceTableStore {
         this.setTable();
         this.setMaxLineNumIndex();
         this.setTableHasData();
+        this.setException();
+    }
+
+    @action
+    reset() {
+        this.trace = [];
+        this.allHeadings = [];
+        this.maxLineNumIndex = 0;
+        this.minLineNumIndex = 0;
+        this.currentLineNumIndex = -1;
+        this.exceptionLineNumIndex = -1;
+        this.exceptionMessage = undefined;
+        this.table = {};
+        this.tableHasData = false;
+        this.allHeadings = [];
+        this.validLineNums = [];
     }
 
     /**
@@ -239,5 +259,15 @@ export class TraceTableStore {
         }
         console.log("headings result: ", result);
         this.allHeadings = result;
+    }
+
+    @action
+    setException() {
+        this.trace?.forEach((it, index) => {
+            if (it.event === "exception") {
+                this.exceptionLineNumIndex = index;
+                this.exceptionMessage = it.exception_msg;
+            }
+        })
     }
 }

@@ -91,6 +91,10 @@
   background: #ffc1086b;
   font-weight: 700;
 }
+
+.cell-exception {
+  background: red;
+}
 .ace-dropdown {
   width: 30%;
   padding-left: 10px;

@@ -88,7 +88,8 @@ class TraceTable extends React.Component<any> {
                 const lineNum = this.traceTableStore.validLineNums[index];
                 let emptyRow: boolean = true;
                 const rowKey = "row-" + index;
-                const row = <tr key={rowKey}>
+                const row = <tr key={rowKey}
+                                className={`cell${this.traceTableStore.exceptionLineNumIndex === index ? "-exception" : ""}`}>
                     {
                         allHeadings.map(heading => {
                             const entry = table[heading];
@@ -107,7 +108,7 @@ class TraceTable extends React.Component<any> {
                             let highlightCell = this.canHighlight(index, currLineNumIndex, heading, value);
                             if (highlightCell) {
                                 return <td key={key} id={key}
-                                           className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
+                                           className={`cell${highlightCell ? "-highlighted" : ""}`}>{value}</td>;
                             } else {
                                 return <td key={key} id={key}>{value}</td>;
                             }

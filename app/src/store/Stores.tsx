@@ -1,10 +1,10 @@
-import {observable, action, makeObservable, computed} from 'mobx';
+import {observable, action, makeObservable} from 'mobx';
 
 export interface TraceTableItem {
-    event: string | undefined,
-    func_name: string | undefined,
+    event: string,
+    func_name: string,
     globals: {},
-    line: number | undefined,
+    line: number,
     locals: {},
     stdout: string | undefined
 }
@@ -15,7 +15,17 @@ export class UserCodeStore {
     code: string = `# Please type your code here
 # Limitations:
 # \t- Object Oriented Programming not supported
-# \t- Function calls are not supported`;
+# \t- Function calls are not supported
+
+input = 'John,Doe,1984,4,1,male'
+
+tokens = input.split(',')
+firstName = tokens[0]
+lastName = tokens[1]
+birthdate = (int(tokens[2]), int(tokens[3]), int(tokens[4]))
+isMale = (tokens[5] == 'male')
+
+print('Hi ' + firstName + ' ' + lastName)`;
 
     @observable
     language: string = "python27";
@@ -52,16 +62,16 @@ export class TraceTableStore {
     trace: TraceTableItem[]  | undefined;
 
     @observable
-    currentLineNum: number = 1;
+    currentLineNumIndex: number = 0;
 
     @observable
-    maxLineNum = 0;
+    maxLineNumIndex = 0;
 
     @observable
-    minLineNum = 0;
+    minLineNumIndex = 0;
 
     @observable
-    exceptionLineNumber: number = 0;
+    exceptionLineNuM: number = 0;
 
     @observable
     table: {} = {};
@@ -84,8 +94,9 @@ export class TraceTableStore {
     setTrace(newTrace: TraceTableItem[]) {
         this.trace = newTrace;
         this.setHeadings();
+        this.setValidLineNums();
         this.setTable();
-        this.setMaxLineNum();
+        this.setMaxLineNumIndex();
         this.setTableHasData();
     }
 
@@ -121,13 +132,13 @@ export class TraceTableStore {
         console.log("this.allheadings: ", this.allHeadings.values());
         const newTable = {};
         if (this.trace && this.allHeadings) {
-            this.trace.forEach(it => {
+            this.trace.forEach((it, index) => {
                 if (Object.keys(it.globals).length > 0) {
                     Object.keys(it.globals).forEach(global => {
                         if (!newTable[global]) {
                             newTable[global] = {};
                         }
-                        newTable[global][it.line] = it.globals[global];
+                        newTable[global][index] = it.globals[global];
                     });
                     if (!newTable["Line"]) {
                         newTable["Line"] = {};
@@ -135,16 +146,14 @@ export class TraceTableStore {
                     if (!newTable["Output"]) {
                         newTable["Output"] = {};
                     }
-                    newTable["Line"][it.line] = true;
-                    newTable["Output"][it.line] = it.stdout;
+                    newTable["Line"][index] = true;
+                    newTable["Output"][index] = it.stdout; // todo: this overwrites duplicate line nums
                 }
             })
         } else {
             console.log("Unable to set table");
         }
         this.table = newTable;
-        console.log("Final table json: ", this.table);
-
     }
 
     @action
@@ -155,29 +164,16 @@ export class TraceTableStore {
     }
 
     /**
-     * Set max line number for this trace
+     * Set max line number index for this trace. We're looking at the index number
+     * of the line number in validLineNums because a line number might be all over the
+     * place if there are function calls or it's an OOP program.
      */
     @action
-    setMaxLineNum() {
-        if (this.trace) {
-            const lineNums = this.trace.map(it => Number(it.line)).sort();
-            if (lineNums) {
-                this.maxLineNum = lineNums[lineNums.length - 1];
-            }
+    setMaxLineNumIndex() {
+        if (this.validLineNums) {
+            this.maxLineNumIndex = this.validLineNums.length - 1;
         }
-    }
-
-    /**
-     * Set min line number for this trace
-     */
-    @action
-    setMinLineNum() {
-        if (this.trace) {
-            const lineNums = this.trace.map(it => Number(it.line)).sort();
-            if (lineNums) {
-                this.minLineNum = lineNums[0];
-            }
-        }
+        console.log("max line num index: ", this.maxLineNumIndex);
     }
 
     /**
@@ -197,17 +193,17 @@ export class TraceTableStore {
 
     @action
     decrementLineNum() {
-        this.currentLineNum--;
-        if (this.currentLineNum < this.minLineNum) {
-            this.currentLineNum = this.minLineNum;
+        this.currentLineNumIndex--;
+        if (this.currentLineNumIndex < 0) {
+            this.currentLineNumIndex = 0;
         }
     }
 
     @action
     incrementLineNum() {
-        this.currentLineNum++;
-        if (this.currentLineNum > this.maxLineNum) {
-            this.currentLineNum = this.maxLineNum;
+        this.currentLineNumIndex++;
+        if (this.currentLineNumIndex > this.maxLineNumIndex) {
+            this.currentLineNumIndex = this.maxLineNumIndex;
         }
     }
 

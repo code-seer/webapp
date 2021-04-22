@@ -20,47 +20,43 @@ class TraceTable extends React.Component<any> {
         }
     }
 
-    getTable = (line: number) => {
+    getTable = (currLineNumIndex: number) => {
         const table: {} = this.traceTableStore.table;
         const allHeadings = this.traceTableStore.allHeadings;
         const rows = () => {
-            const validLinesToRender: any[] = Object.keys(table["Line"])
-                .sort()
-                .filter(key => Number(key) <= line);
-            const rowsToRender: any[] = validLinesToRender.map(currRow => {
-                    let emptyRow: boolean = true;
-                    const rowKey = "row-" + currRow;
-                    const row = <tr key={rowKey}>
-                        {
-                            allHeadings.map(heading => {
-                                const entry = table[heading];
-                                const key = heading + "-cell-" + currRow;
-                                let value = entry[currRow] === undefined ? "-" : entry[currRow];
-                                let highlightCell = true;
-                                if (heading === "Line") {
-                                    value = "" + currRow;
-                                    highlightCell = false;
-                                }
-                                if (value !== "-") {
-                                    emptyRow = false;
-                                }
-                                if (highlightCell && currRow === line && value !== "-") {
-                                    return <td key={key} id={key}
-                                               className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
-                                }
-                                else {
-                                    return <td key={key} id={key}>{value}</td>;
-                                }
+            const rowsToRender: any[] = [];
+            let index = 0;
+            while (index <= currLineNumIndex) {
+                const lineNum = this.traceTableStore.validLineNums[index];
+                let emptyRow: boolean = true;
+                const rowKey = "row-" + index;
+                const row = <tr key={rowKey}>
+                    {
+                        allHeadings.map(heading => {
+                            const entry = table[heading];
+                            const key = heading + "-cell-" + index;
+                            let value = entry[index] === undefined ? "-" : entry[index];
+                            let highlightCell = true;
+                            if (heading === "Line") {
+                                value = "" + lineNum;
+                                highlightCell = false;
+                            }
+                            if (value !== "-") {
+                                emptyRow = false;
+                            }
+                            if (highlightCell && index === currLineNumIndex && value !== "-") {
+                                return <td key={key} id={key}
+                                           className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
+                            } else {
+                                return <td key={key} id={key}>{value}</td>;
+                            }
 
-                            })
-                        }
-                    </tr>
-                    if (!emptyRow) {
-                        return row;
+                        })
                     }
-                    return undefined;
-                })
-                .filter(newRow => newRow !== undefined)
+                </tr>;
+                rowsToRender.push(row);
+                index++;
+            }
             return rowsToRender;
         };
 
@@ -84,11 +80,11 @@ class TraceTable extends React.Component<any> {
 
     render() {
         console.log("trace table in render: " , this.traceTableStore.trace);
-        console.log("this.traceTableStore.currentLineNum: ", this.traceTableStore.currentLineNum);
+        console.log("this.traceTableStore.currentLineNumIndex: ", this.traceTableStore.currentLineNumIndex);
         const tableHasData = this.traceTableStore.tableHasData;
         return (
           <div className="trace-table-canvas">
-              {tableHasData && this.getTable(this.traceTableStore.currentLineNum)}
+              {tableHasData && this.getTable(this.traceTableStore.currentLineNumIndex)}
               {!tableHasData &&
               <div className="trace-table-placeholder">
                   { this.userCodeStore.resultPending &&

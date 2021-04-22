@@ -33,7 +33,6 @@ export class UserCodeStore {
     @action
     setLanguage(language: string) {
         this.language = language;
-        console.log("New language: ", this.language);
     }
 
     @action
@@ -59,8 +58,41 @@ export class TraceTableStore {
     maxLineNum = 0;
 
     @observable
-    tables = {};
-    table: {} = {
+    minLineNum = 0;
+
+    @observable
+    exceptionLineNumber: number = 0;
+
+    @observable
+    table: {} = {};
+
+    @observable
+    tableHasData: boolean = false;
+
+    // All global headings
+    @observable
+    allHeadings: any[] =  [];
+
+    @observable
+    validLineNums: number[] = [];
+
+    constructor() {
+        makeObservable(this);
+    }
+
+    @action
+    setTrace(newTrace: TraceTableItem[]) {
+        this.trace = newTrace;
+        this.setHeadings();
+        this.setTable();
+        this.setMaxLineNum();
+        this.setTableHasData();
+    }
+
+    /**
+     * Parse the stack trace and create a map that has the following
+     * structure:
+     *      table: {} = {
         Heading1: {
             1: "abc",
             5: "abc4"
@@ -81,28 +113,38 @@ export class TraceTableStore {
             4: true,
             5: true
         }
-    };
-
-    @observable
-    tableHasData: boolean = false;
-
-    // All global headings
-    @observable
-    allHeadings: any[] =  [];
-
-    @observable
-    validLineNums = [1, 2, 4, 5];
-
-    constructor() {
-        makeObservable(this);
     }
-
+     */
     @action
-    setTrace(newTrace: TraceTableItem[]) {
-        this.trace = newTrace;
-        this.setHeadings();
-        this.setMaxLineNum();
-        this.setTableHasData();
+    setTable() {
+        console.log("this.trace: ", this.trace?.values());
+        console.log("this.allheadings: ", this.allHeadings.values());
+        const newTable = {};
+        if (this.trace && this.allHeadings) {
+            this.trace.forEach(it => {
+                if (Object.keys(it.globals).length > 0) {
+                    Object.keys(it.globals).forEach(global => {
+                        if (!newTable[global]) {
+                            newTable[global] = {};
+                        }
+                        newTable[global][it.line] = it.globals[global];
+                    });
+                    if (!newTable["Line"]) {
+                        newTable["Line"] = {};
+                    }
+                    if (!newTable["Output"]) {
+                        newTable["Output"] = {};
+                    }
+                    newTable["Line"][it.line] = true;
+                    newTable["Output"][it.line] = it.stdout;
+                }
+            })
+        } else {
+            console.log("Unable to set table");
+        }
+        this.table = newTable;
+        console.log("Final table json: ", this.table);
+
     }
 
     @action
@@ -113,25 +155,51 @@ export class TraceTableStore {
     }
 
     /**
-     * Set the maximum line number
+     * Set max line number for this trace
      */
     @action
     setMaxLineNum() {
         if (this.trace) {
-            const lineNum = this.trace[this.trace.length-1].line;
-            if (lineNum) {
-                this.maxLineNum = lineNum;
-            } else {
-                this.maxLineNum = 0;
+            const lineNums = this.trace.map(it => Number(it.line)).sort();
+            if (lineNums) {
+                this.maxLineNum = lineNums[lineNums.length - 1];
             }
         }
+    }
+
+    /**
+     * Set min line number for this trace
+     */
+    @action
+    setMinLineNum() {
+        if (this.trace) {
+            const lineNums = this.trace.map(it => Number(it.line)).sort();
+            if (lineNums) {
+                this.minLineNum = lineNums[0];
+            }
+        }
+    }
+
+    /**
+     * Determine all valid line numbers from the stack trace. Line
+     * numbers should not be sorted since it's perfectly valid for the
+     * numbers to not be monotonically increasing.
+     */
+    @action
+    setValidLineNums() {
+        this.trace?.map(it => {
+            const lineNum = it.line;
+            if (lineNum) {
+                this.validLineNums.push(lineNum);
+            }
+        })
     }
 
     @action
     decrementLineNum() {
         this.currentLineNum--;
-        if (this.currentLineNum < 0) {
-            this.currentLineNum = 0;
+        if (this.currentLineNum < this.minLineNum) {
+            this.currentLineNum = this.minLineNum;
         }
     }
 
@@ -153,23 +221,27 @@ export class TraceTableStore {
         const getKeys = (attributes) => {
             const keys = new Set();
             if (attributes) {
-                Object.keys(attributes).map(key => {
+                Object.keys(attributes).forEach(key => {
                     keys.add(key);
-                    return undefined;
                 })
             }
             return keys;
         }
         const headings = new Set();
-        this.trace?.map(it => {
-            getKeys(it.globals).forEach(headings.add, headings);
+        this.trace?.forEach(it => {
+            const newHeadings = getKeys(it.globals);
+            newHeadings.forEach(item => {
+                headings.add(item);
+            })
         })
+        console.log("New headings: ", headings);
         const result: any[] = [];
         if (headings.size > 0) {
             result.push("Line");
             result.push(...Array.from(headings.values()).sort());
             result.push("Output");
         }
-        return result;
+        console.log("headings result: ", result);
+        this.allHeadings = result;
     }
 }

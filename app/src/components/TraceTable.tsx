@@ -37,14 +37,14 @@ class TraceTable extends React.Component<any> {
                                 const key = heading + "-cell-" + currRow;
                                 let value = entry[currRow] === undefined ? "-" : entry[currRow];
                                 let highlightCell = true;
-                                if (heading == "Line") {
+                                if (heading === "Line") {
                                     value = "" + currRow;
                                     highlightCell = false;
                                 }
                                 if (value !== "-") {
                                     emptyRow = false;
                                 }
-                                if (highlightCell && currRow == line && value !== "-") {
+                                if (highlightCell && currRow === line && value !== "-") {
                                     return <td key={key} id={key}
                                                className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
                                 }

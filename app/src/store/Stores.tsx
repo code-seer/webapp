@@ -72,7 +72,7 @@ export class TraceTableStore {
     minLineNumIndex = 0;
 
     @observable
-    exceptionLineNumIndex: number = 0;
+    exceptionLineNumIndex: number = -1;
 
     @observable
     exceptionMessage: string | undefined;

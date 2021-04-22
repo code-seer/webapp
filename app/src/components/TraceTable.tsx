@@ -1,7 +1,8 @@
 import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
+import Overlay from 'react-bootstrap/Overlay';
 import {TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
@@ -78,6 +79,14 @@ class TraceTable extends React.Component<any> {
         return value === undefined ? "-" : value.toString();
     }
 
+    hasException = (currLineNumIndex: number) => {
+        if (currLineNumIndex === this.traceTableStore.exceptionLineNumIndex &&
+        this.traceTableStore.exceptionMessage !== undefined) {
+            return true;
+        }
+        return false;
+    }
+
     getTable = (currLineNumIndex: number) => {
         const table: {} = this.traceTableStore.table;
         const allHeadings = this.traceTableStore.allHeadings;
@@ -88,8 +97,9 @@ class TraceTable extends React.Component<any> {
                 const lineNum = this.traceTableStore.validLineNums[index];
                 let emptyRow: boolean = true;
                 const rowKey = "row-" + index;
-                const row = <tr key={rowKey}
-                                className={`cell${this.traceTableStore.exceptionLineNumIndex === index ? "-exception" : ""}`}>
+                const hasException = this.hasException(index);
+                let row = <tr key={rowKey}
+                                className={`cell${hasException ? "-exception" : ""}`}>
                     {
                         allHeadings.map(heading => {
                             const entry = table[heading];
@@ -116,6 +126,13 @@ class TraceTable extends React.Component<any> {
                         })
                     }
                 </tr>;
+                if (hasException) {
+                    const key = "exception-" + index;
+                    row = <tr key={rowKey} className={`cell${hasException ? "-exception" : ""}`}>
+                            <td key={key + "-line"} id={key + "-line"}>{lineNum}</td>
+                            <td key={key} id={key} colSpan={this.traceTableStore.allHeadings.length - 1}>{this.traceTableStore.exceptionMessage}</td>
+                    </tr>
+                }
                 rowsToRender.push(row);
                 index++;
             }

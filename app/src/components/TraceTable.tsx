@@ -20,6 +20,38 @@ class TraceTable extends React.Component<any> {
         }
     }
 
+    /**
+     * Determine if cell call be highlighted. A cell can be highlighted
+     * if the current value is different from the previous value;
+     *
+     * @param index
+     * @param heading
+     */
+    canHighlight = (index: number, currLineNumIndex: number, heading: string, value: string) => {
+        if (heading === "Line" || index !== currLineNumIndex) {
+            // Do not highlight the Line column or any row that comes before the current row, i.e.
+            // the current line number
+            return false;
+        }
+        const prevIndex = currLineNumIndex - 1;
+        if (prevIndex < 0 && value === "-") {
+            // This is the first row. If a value has not been set yet, then we
+            // should not highlight it.
+            // Note: A first row item will always have a value of undefined because the
+            // code would not have executed yet. It's only on the next row that it
+            // could be highlighted (we're saying could because the variable might not
+            // necessarily be instatiated until much later)
+            return false;
+        }
+        if (index == currLineNumIndex && prevIndex >= 0 && value !== "-") {
+            // Compare the previous value to the current value
+            if (this.traceTableStore.table[heading][prevIndex] !== this.traceTableStore.table[heading][currLineNumIndex]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getTable = (currLineNumIndex: number) => {
         const table: {} = this.traceTableStore.table;
         const allHeadings = this.traceTableStore.allHeadings;
@@ -35,16 +67,17 @@ class TraceTable extends React.Component<any> {
                         allHeadings.map(heading => {
                             const entry = table[heading];
                             const key = heading + "-cell-" + index;
-                            let value = entry[index] === undefined ? "-" : entry[index];
-                            let highlightCell = true;
+                            let value = entry[index] === undefined ? "-" : entry[index].toString();
                             if (heading === "Line") {
                                 value = "" + lineNum;
-                                highlightCell = false;
+                            } else if (value.length == 0) {
+                                value = "-"
                             }
-                            if (value !== "-") {
+                            if (heading !== "Line" && value !== "-") {
                                 emptyRow = false;
                             }
-                            if (highlightCell && index === currLineNumIndex && value !== "-") {
+                            let highlightCell = this.canHighlight(index, currLineNumIndex, heading, value);
+                            if (highlightCell) {
                                 return <td key={key} id={key}
                                            className={`cell${this.state.highlightCell ? "-highlighted" : ""}`}>{value}</td>;
                             } else {

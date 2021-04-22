@@ -1,14 +1,9 @@
 import * as React from "react";
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
-import Row from "react-bootstrap/Row";
 import {configs} from "../util/config";
 
 interface NavBarInstanceProps {
@@ -22,6 +17,19 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
         feedbackBody: "",
         feedbackName: "",
         feedbackEmail: ""
+    }
+
+    componentDidMount() {
+        this.resetModal();
+    }
+
+    resetModal = () => {
+        this.setState({
+            show: false,
+            feedbackBody: "",
+            feedbackName: "",
+            feedbackEmail: ""
+        })
     }
 
     handleFeedbackDialogShow = () => {
@@ -65,7 +73,7 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
             }).catch(error => {
             console.log(error)
         });
-        this.setState({show: false});
+        this.resetModal();
     }
 
     render() {

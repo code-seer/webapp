@@ -62,7 +62,7 @@ export class TraceTableStore {
     trace: TraceTableItem[]  | undefined;
 
     @observable
-    currentLineNumIndex: number = 0;
+    currentLineNumIndex: number = -1;
 
     @observable
     maxLineNumIndex = 0;
@@ -195,7 +195,7 @@ export class TraceTableStore {
     decrementLineNum() {
         this.currentLineNumIndex--;
         if (this.currentLineNumIndex < 0) {
-            this.currentLineNumIndex = 0;
+            this.currentLineNumIndex = -1;
         }
     }
 

@@ -45,11 +45,37 @@ class TraceTable extends React.Component<any> {
         }
         if (index == currLineNumIndex && prevIndex >= 0 && value !== "-") {
             // Compare the previous value to the current value
-            if (this.traceTableStore.table[heading][prevIndex] !== this.traceTableStore.table[heading][currLineNumIndex]) {
+            // console.log("previous: ", this.traceTableStore.table[heading][prevIndex]);
+            // console.log("current: ", this.traceTableStore.table[heading][currLineNumIndex]);
+            if (this.serializeValue(this.traceTableStore.table[heading][prevIndex])
+                !== this.serializeValue(this.traceTableStore.table[heading][currLineNumIndex])) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Serialize objects as strings so string comparisons return a valid result
+     *
+     * @param value
+     */
+    serializeValue = (value: any) => {
+        if (value instanceof Array) {
+            if (value.length > 0) {
+                const type: string = value[0];
+                const copy = [...value];
+                switch (type) {
+                    case "LIST":
+                       return`[${copy.splice(1).join(",")}]`;
+                    case "TUPLE":
+                        return`(${copy.splice(1).join(",")})`;
+                    default:
+                        return copy.toString();
+                }
+            }
+        }
+        return value === undefined ? "-" : value.toString();
     }
 
     getTable = (currLineNumIndex: number) => {
@@ -67,15 +93,17 @@ class TraceTable extends React.Component<any> {
                         allHeadings.map(heading => {
                             const entry = table[heading];
                             const key = heading + "-cell-" + index;
-                            let value = entry[index] === undefined ? "-" : entry[index].toString();
+                            let value = this.serializeValue(entry[index]);
                             if (heading === "Line") {
                                 value = "" + lineNum;
-                            } else if (value.length == 0) {
+                            }
+                            if (heading === "Output" && value.length == 0) {
                                 value = "-"
                             }
                             if (heading !== "Line" && value !== "-") {
                                 emptyRow = false;
                             }
+
                             let highlightCell = this.canHighlight(index, currLineNumIndex, heading, value);
                             if (highlightCell) {
                                 return <td key={key} id={key}

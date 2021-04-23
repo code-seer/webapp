@@ -89,7 +89,7 @@
 
 .cell-highlighted {
   background: #ffc1086b;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .cell-exception {
@@ -118,6 +118,12 @@
 }
 .learnet-table tr {
   line-height: 1;
+}
+.table td {
+  max-width: 84px ;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .App-link {

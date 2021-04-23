@@ -1,7 +1,5 @@
 export const configs = {
-    scheme: "http",
-    host: "localhost",
-    port: "5000",
+    baseUrl: process.env.REACT_APP_SERVER_URL,
     urls: {
         feedback: "api/feedback",
         visualizer: "api/visualizer"

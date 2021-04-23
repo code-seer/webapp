@@ -61,7 +61,7 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
             feedback: this.state.feedbackBody,
             email: this.state.feedbackEmail
         };
-        const url =  `${configs.scheme}://${configs.host}:${configs.port}/${configs.urls.feedback}`;
+        const url =  `${configs.baseUrl}/${configs.urls.feedback}`;
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

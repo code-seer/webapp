@@ -19,7 +19,7 @@ class EditorController extends React.Component<any> {
 
     onRun = () => {
         this.traceTableStore.reset();
-        const url =  `${configs.scheme}://${configs.host}:${configs.port}/${configs.urls.visualizer}`;
+        const url =  `${configs.baseUrl}/${configs.urls.visualizer}`;
         const body = {
             "language": this.userCodeStore.language,
             "user_code": this.encodedUserCode(),

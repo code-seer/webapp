@@ -16,19 +16,7 @@ export class UserCodeStore {
     code: string = `# Please type your code here
 # Limitations:
 # \t- Object Oriented Programming not supported
-# \t- Function calls are not supported
-
-input = 'John,Doe,1984,4,1,male'
-
-tokens = input.split(',')
-firstName = tokens[0]
-lastName = tokens[1]
-birthdate = (int(tokens[2]), int(tokens[3]), int(tokens[4]))
-isMale = (tokens[5] == 'male')
-
-d = {"a": "A", "b": "B"}
-
-print('Hi ' + firstName + ' ' + lastName)`;
+# \t- Function calls are not supported`;
 
     @observable
     language: string = "python27";
@@ -169,15 +157,15 @@ export class TraceTableStore {
                                 }
                                 newTable[global][index] = it.globals[global];
                             });
-                            if (!newTable["Line"]) {
-                                newTable["Line"] = {};
-                            }
-                            if (!newTable["Output"]) {
-                                newTable["Output"] = {};
-                            }
-                            newTable["Line"][index] = true;
-                            newTable["Output"][index] = it.stdout;
                         }
+                        if (!newTable["Line"]) {
+                            newTable["Line"] = {};
+                        }
+                        if (!newTable["Output"]) {
+                            newTable["Output"] = {};
+                        }
+                        newTable["Line"][index] = true;
+                        newTable["Output"][index] = it.stdout;
                     }
             })
         }

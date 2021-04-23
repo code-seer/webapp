@@ -91,7 +91,6 @@ class AceEditorWidget extends React.Component<any> {
     }
     onChange = (newValue: any) => {
         this.userCodeStore.code = newValue;
-        console.log("new code: " + this.userCodeStore.code)
         this.setState({
             value: newValue
         });

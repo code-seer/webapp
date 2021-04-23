@@ -2,7 +2,6 @@ import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
-import Overlay from 'react-bootstrap/Overlay';
 import {TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
@@ -44,7 +43,7 @@ class TraceTable extends React.Component<any> {
             // necessarily be instatiated until much later)
             return false;
         }
-        if (index == currLineNumIndex && prevIndex >= 0 && value !== "-") {
+        if (index === currLineNumIndex && prevIndex >= 0 && value !== "-") {
             // Compare the previous value to the current value
             if (this.serializeValue(this.traceTableStore.table[heading][prevIndex])
                 !== this.serializeValue(this.traceTableStore.table[heading][currLineNumIndex])) {
@@ -75,7 +74,7 @@ class TraceTable extends React.Component<any> {
                         dictValues.forEach(pair => {
                             const k = pair[0];
                             const v = pair[1];
-                            if (res.length == 0) {
+                            if (res.length === 0) {
                                 res = res + `${k}=${v}`;
                             } else {
                                 res = res + `; ${k}=${v}`;
@@ -119,7 +118,7 @@ class TraceTable extends React.Component<any> {
                             if (heading === "Line") {
                                 value = "" + lineNum;
                             }
-                            if (heading === "Output" && value.length == 0) {
+                            if (heading === "Output" && value.length === 0) {
                                 value = "-"
                             }
                             if (heading !== "Line" && value !== "-") {

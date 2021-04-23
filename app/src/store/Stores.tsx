@@ -141,7 +141,7 @@ export class TraceTableStore {
         const newTable = {};
         if (this.trace) {
             this.trace.forEach((it, index) => {
-                    if (it.event === "exception" || it.event == "uncaught_exception") {
+                    if (it.event === "exception" || it.event === "uncaught_exception") {
                         if (!newTable["Line"]) {
                             newTable["Line"] = {};
                         }
@@ -253,9 +253,11 @@ export class TraceTableStore {
     @action
     setException() {
         this.trace?.forEach((it, index) => {
-            if (it.event === "exception" || it.event == "uncaught_exception") {
+            if (it.event === "exception" || it.event === "uncaught_exception") {
                 this.exceptionLineNumIndex = index;
                 this.exceptionMessage = it.exception_msg;
+
+                console.log("exception set: ", index, it.exception_msg);
             }
         })
     }

@@ -3,7 +3,7 @@ export const configs = {
     host: "localhost",
     port: "5000",
     urls: {
-        feedback: "feedback",
-        visualizer: "visualizer"
+        feedback: "api/feedback",
+        visualizer: "api/visualizer"
     }
 };

@@ -26,6 +26,8 @@ lastName = tokens[1]
 birthdate = (int(tokens[2]), int(tokens[3]), int(tokens[4]))
 isMale = (tokens[5] == 'male')
 
+d = {"a": "A", "b": "B"}
+
 print('Hi ' + firstName + ' ' + lastName)`;
 
     @observable
@@ -97,9 +99,9 @@ export class TraceTableStore {
     @action
     setTrace(newTrace: TraceTableItem[]) {
         this.trace = newTrace;
+        this.setTable();
         this.setHeadings();
         this.setValidLineNums();
-        this.setTable();
         this.setMaxLineNumIndex();
         this.setTableHasData();
         this.setException();
@@ -148,39 +150,43 @@ export class TraceTableStore {
      */
     @action
     setTable() {
-        console.log("this.trace: ", this.trace?.values());
-        console.log("this.allheadings: ", this.allHeadings.values());
         const newTable = {};
-        if (this.trace && this.allHeadings) {
+        if (this.trace) {
             this.trace.forEach((it, index) => {
-                if (Object.keys(it.globals).length > 0) {
-                    Object.keys(it.globals).forEach(global => {
-                        if (!newTable[global]) {
-                            newTable[global] = {};
+                    if (it.event === "exception" || it.event == "uncaught_exception") {
+                        if (!newTable["Line"]) {
+                            newTable["Line"] = {};
                         }
-                        newTable[global][index] = it.globals[global];
-                    });
-                    if (!newTable["Line"]) {
-                        newTable["Line"] = {};
+                        if (!newTable["Output"]) {
+                            newTable["Output"] = {};
+                        }
+                        newTable["Line"][index] = true;
+                    } else {
+                        if (Object.keys(it.globals).length > 0) {
+                            Object.keys(it.globals).forEach(global => {
+                                if (!newTable[global]) {
+                                    newTable[global] = {};
+                                }
+                                newTable[global][index] = it.globals[global];
+                            });
+                            if (!newTable["Line"]) {
+                                newTable["Line"] = {};
+                            }
+                            if (!newTable["Output"]) {
+                                newTable["Output"] = {};
+                            }
+                            newTable["Line"][index] = true;
+                            newTable["Output"][index] = it.stdout;
+                        }
                     }
-                    if (!newTable["Output"]) {
-                        newTable["Output"] = {};
-                    }
-                    newTable["Line"][index] = true;
-                    newTable["Output"][index] = it.stdout; // todo: this overwrites duplicate line nums
-                }
             })
-        } else {
-            console.log("Unable to set table");
         }
         this.table = newTable;
     }
 
     @action
     setTableHasData() {
-        if (this.allHeadings.length > 0) {
-            this.tableHasData = true;
-        }
+        this.tableHasData = Object.keys(this.table).length > 0;
     }
 
     /**
@@ -193,7 +199,6 @@ export class TraceTableStore {
         if (this.validLineNums) {
             this.maxLineNumIndex = this.validLineNums.length - 1;
         }
-        console.log("max line num index: ", this.maxLineNumIndex);
     }
 
     /**
@@ -250,21 +255,17 @@ export class TraceTableStore {
                 headings.add(item);
             })
         })
-        console.log("New headings: ", headings);
         const result: any[] = [];
-        if (headings.size > 0) {
-            result.push("Line");
-            result.push(...Array.from(headings.values()).sort());
-            result.push("Output");
-        }
-        console.log("headings result: ", result);
+        result.push("Line");
+        result.push(...Array.from(headings.values()).sort());
+        result.push("Output");
         this.allHeadings = result;
     }
 
     @action
     setException() {
         this.trace?.forEach((it, index) => {
-            if (it.event === "exception") {
+            if (it.event === "exception" || it.event == "uncaught_exception") {
                 this.exceptionLineNumIndex = index;
                 this.exceptionMessage = it.exception_msg;
             }

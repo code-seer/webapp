@@ -46,8 +46,6 @@ class TraceTable extends React.Component<any> {
         }
         if (index == currLineNumIndex && prevIndex >= 0 && value !== "-") {
             // Compare the previous value to the current value
-            // console.log("previous: ", this.traceTableStore.table[heading][prevIndex]);
-            // console.log("current: ", this.traceTableStore.table[heading][currLineNumIndex]);
             if (this.serializeValue(this.traceTableStore.table[heading][prevIndex])
                 !== this.serializeValue(this.traceTableStore.table[heading][currLineNumIndex])) {
                 return true;
@@ -68,9 +66,22 @@ class TraceTable extends React.Component<any> {
                 const copy = [...value];
                 switch (type) {
                     case "LIST":
-                       return`[${copy.splice(1).join(",")}]`;
+                       return`[${copy.splice(2).join(",")}]`;
                     case "TUPLE":
-                        return`(${copy.splice(1).join(",")})`;
+                        return`(${copy.splice(2).join(",")})`;
+                    case "DICT":
+                        const dictValues = copy.splice(2)
+                        let res = "";
+                        dictValues.forEach(pair => {
+                            const k = pair[0];
+                            const v = pair[1];
+                            if (res.length == 0) {
+                                res = res + `${k}=${v}`;
+                            } else {
+                                res = res + `; ${k}=${v}`;
+                            }
+                        })
+                        return `{${res}}`;
                     default:
                         return copy.toString();
                 }
@@ -158,8 +169,6 @@ class TraceTable extends React.Component<any> {
     }
 
     render() {
-        console.log("trace table in render: " , this.traceTableStore.trace);
-        console.log("this.traceTableStore.currentLineNumIndex: ", this.traceTableStore.currentLineNumIndex);
         const tableHasData = this.traceTableStore.tableHasData;
         return (
           <div className="trace-table-canvas">

@@ -11,8 +11,8 @@ services:
       - "traefik.backend=learnet_ui"
       - "traefik.docker.network=traefik_network"
       - "traefik.frontend.entryPoints=http,https"
-      networks:
-        - traefik_network
+    networks:
+      - traefik_network
 
 networks:
   traefik_network:

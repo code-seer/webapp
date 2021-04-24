@@ -4,5 +4,16 @@ services:
     build: .
     container_name: learnet_ui
     restart: always
-    ports:
-      - "80:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:learnet.io"
+      - "traefik.port=80"
+      - "traefik.backend=learnet_ui"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=http,https"
+      networks:
+        - traefik_network
+
+networks:
+  traefik_network:
+    external: true

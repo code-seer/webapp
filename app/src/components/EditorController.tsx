@@ -59,7 +59,7 @@ class EditorController extends React.Component<any> {
         const codeEditorIsEmpty = this.userCodeStore.code.length === 0;
         const tableHasNoData = !this.traceTableStore.tableHasData;
         return (
-            <div>
+            <Row className="controllers">
                 <Row className="ace-editor-controller run">
                     <Button className="ace-editor-code-run-btn" variant="success"
                             onClick={() => {this.onRun()}} disabled={codeEditorIsEmpty}>
@@ -79,7 +79,7 @@ class EditorController extends React.Component<any> {
                     </Button>{' '}
                 </Row>
 
-            </div>
+            </Row>
         );
     }
 }

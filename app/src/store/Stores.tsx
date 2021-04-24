@@ -256,8 +256,6 @@ export class TraceTableStore {
             if (it.event === "exception" || it.event === "uncaught_exception") {
                 this.exceptionLineNumIndex = index;
                 this.exceptionMessage = it.exception_msg;
-
-                console.log("exception set: ", index, it.exception_msg);
             }
         })
     }

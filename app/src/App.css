@@ -35,14 +35,19 @@
   padding-top: 10px;
   margin-right: -15px;
 }
-.ace-editor-controller {
-  padding-top: 15vh;
-  padding-left: 30px;
 
-}
 .ace-editor-controller-container {
   border-right: 1px solid #e8e8e8;
   border-left: 1px solid #e8e8e8;
+}
+.ace-editor-controller-container .controllers{
+  margin-left: 15px;
+  margin-right: 15px;
+  padding-top: 25vh;
+  display: block;
+}
+.ace-editor-controller.up  {
+  padding-top: 20px;
 }
 
 .ace-editor-controller.down  {
@@ -53,7 +58,7 @@
   font-weight: 700;
 }
 .ace-editor-code-run-btn {
-  width: 100px;
+  width: 100%;
 }
 .trace-table-canvas {
   background: #f7f7f7;

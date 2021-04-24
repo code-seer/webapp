@@ -6,9 +6,14 @@ COPY package.json package-lock.json ./
 RUN npm install
 RUN npm audit fix
 
+ARG REACT_APP_SERVER_URL=https://learnet.io:5000
+ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
 ENV PATH="./node_modules/.bin:$PATH"
 
+
 COPY . ./
+RUN echo "REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL" > .env
+
 RUN npm run build
 
 FROM nginx:1.17-alpine

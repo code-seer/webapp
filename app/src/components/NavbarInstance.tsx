@@ -13,7 +13,8 @@ interface NavBarInstanceProps {
 
 class NavBarInstance extends React.Component<NavBarInstanceProps> {
     state = {
-        show: false,
+        showFeedbackDialog: false,
+        showAboutDialog: false,
         feedbackBody: "",
         feedbackName: "",
         feedbackEmail: ""
@@ -25,19 +26,26 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
 
     resetModal = () => {
         this.setState({
-            show: false,
+            showFeedbackDialog: false,
             feedbackBody: "",
             feedbackName: "",
             feedbackEmail: ""
         })
     }
+    handleAboutDialogShow = () => {
+        this.setState({showAboutDialog: true});
+    }
+
+    handleAboutDialogClose = () => {
+        this.setState({showAboutDialog: false});
+    }
 
     handleFeedbackDialogShow = () => {
-        this.setState({show: true});
+        this.setState({showFeedbackDialog: true});
     }
 
     handleFeedbackDialogClose = () => {
-        this.setState({show: false});
+        this.setState({showFeedbackDialog: false});
     }
 
     handleFeedbackBodyChange = (event: any) => {
@@ -77,7 +85,10 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
     }
 
     render() {
-        const { show } = this.state;
+        const {
+            showFeedbackDialog,
+            showAboutDialog
+        } = this.state;
         return (
             <Navbar bg="primary" variant="dark">
                 <Navbar.Brand href="#home">LearNet</Navbar.Brand>
@@ -90,10 +101,48 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
                 <Container>
                     <span className="Navbar-text-center">Code Visualizer</span>
                 </Container>
+                <Button className="about-btn" variant="info" onClick={this.handleAboutDialogShow}>
+                    About
+                </Button>{' '}
+                <Modal show={showAboutDialog} onHide={this.handleAboutDialogClose} size="lg">
+                    <Modal.Header closeButton>
+                        <Modal.Title>About LearNet</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group >
+                            LearNet is a table-based code visualizer. Unlike traditional debugging tools that only execute code forward, LearNet allows you to execute and trace code <strong>forward</strong> and <strong>backward</strong>. That means you can execute a line, see the changes, and undo the execution. You can undo code execution all the way to the first line of the code or move forward to the last line of the code.
+                            <br/>
+                            <br/>
+                            The ability to predict how a code would behave upon execution is an essential skill in software development. It is what allows one to read any code and understand what’s going on or take on a new problem and write out a concise solution. However, developing the intuition to do that is challenging, and sometimes even daunting for beginners. The reasons this is so difficult is because oftentimes there is no relation between what the code is doing and the way we are taught to solve problems or consume information.
+                            <br/>
+                            <br/>
+                            LearNet tries to bridge the gap between these two worlds by re-imagining the execution of code as a table for learning purposes. Even experienced software developers have to resort to some form of tracing either when debugging or writing the code in the first place. A trace table is our most natural intuition. It is this process of visualizing the trace of a code and building a mental model over time that helps one transition into being an algorithmic thinker.
+                            <br/>
+                            <br/>
+
+                            <strong>How to Use the Visualizer</strong>
+                            <br/>
+                            In order to use the visualizer, write your code in the code editor in the left pane and hit the green Play button. This will execute the code and enable the control buttons for scrolling through the lines. When you execute a line of code, a new row is generated and added to the table, showing the state of the variables.
+                            <br/>
+                            <br/>
+                            <strong>Up arrow</strong> - Will reverse execution and render the last line that was executed.
+                            <br/>
+                            <strong>Down arrow</strong> - Will execute the code forward and keep adding new rows to the table with the new states. If a state of a variable has changed, it will be highlighted in orange.
+                        </Form.Group>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleAboutDialogClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
                 <Button className="feedback-btn" variant="warning" onClick={this.handleFeedbackDialogShow}>
                     Feedback
                 </Button>{' '}
-                <Modal show={show} onHide={this.handleFeedbackDialogClose}>
+                <Modal show={showFeedbackDialog} onHide={this.handleFeedbackDialogClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Give us your feedback</Modal.Title>
                     </Modal.Header>

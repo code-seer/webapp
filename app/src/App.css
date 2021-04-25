@@ -30,7 +30,9 @@
   color: white;
   font-weight: 500;
 }
-
+.about-btn {
+  margin-right: 15px;
+}
 .ace-editor {
   padding-top: 10px;
   margin-right: -15px;

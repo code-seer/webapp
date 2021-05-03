@@ -92,6 +92,12 @@ export class TraceTableStore {
     @observable
     validLineNums: number[] = [];
 
+    @observable
+    numRows: number = 0;
+
+    @observable
+    numColumns: number = 0;
+
     constructor() {
         makeObservable(this);
     }
@@ -105,6 +111,7 @@ export class TraceTableStore {
         this.setMaxLineNumIndex();
         this.setTableHasData();
         this.setException();
+        this.setTableDimensions();
     }
 
     @action
@@ -120,6 +127,8 @@ export class TraceTableStore {
         this.tableHasData = false;
         this.allHeadings = [];
         this.validLineNums = [];
+        this.numRows = 0;
+        this.numColumns = 0;
     }
 
     /**
@@ -208,7 +217,7 @@ export class TraceTableStore {
      */
     @action
     setValidLineNums() {
-        this.trace?.map(it => {
+        this.trace?.forEach(it => {
             const lineNum = it.line;
             if (lineNum) {
                 this.validLineNums.push(lineNum);
@@ -230,6 +239,12 @@ export class TraceTableStore {
         if (this.currentLineNumIndex > this.maxLineNumIndex) {
             this.currentLineNumIndex = this.maxLineNumIndex;
         }
+    }
+
+    @action
+    setTableDimensions() {
+        this.numRows = this.validLineNums.length;
+        this.numColumns = this.allHeadings.length;
     }
 
     /**

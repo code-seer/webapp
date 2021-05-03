@@ -14,7 +14,9 @@ class TraceTable extends React.Component<any> {
     private traceTableStore: TraceTableStore = this.props.rootStore.traceTableStore;
     state = {
         intervalId: undefined,
-        highlightCell: true
+        highlightCell: true,
+        overlayTarget: null,
+        showOverlay: false
     }
 
     componentWillUnmount() {
@@ -24,7 +26,10 @@ class TraceTable extends React.Component<any> {
     }
 
     handleCellClick = (event) => {
-        alert("cell clicked. Now what?")
+        this.setState({
+            showOverlay: !this.state.showOverlay,
+            overlayTarget: event
+        })
     }
 
     /**
@@ -132,31 +137,33 @@ class TraceTable extends React.Component<any> {
                                 emptyRow = false;
                             }
 
-                            const popover = (
-                                <Popover id="popover-basic">
-                                    <Popover.Title as="h3">Popover right</Popover.Title>
-                                    <Popover.Content>
-                                        And here's some <strong>amazing</strong> content. It's very engaging.
-                                        right?
-                                    </Popover.Content>
-                                </Popover>
-                            );
-
-                            // <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-                            //     <Button variant="success">Click me to see</Button>
-                            // </OverlayTrigger>
+                            const popover = <Popover id="popover-contained">
+                                <Popover.Title as="h3">{heading}</Popover.Title>
+                                <Popover.Content>
+                                    <strong>{value}</strong>
+                                </Popover.Content>
+                            </Popover>
 
                             let highlightCell = this.canHighlight(index, currLineNumIndex, heading, value);
                             if (highlightCell) {
                                 return <td key={key} id={key}
                                            onClick={this.handleCellClick}
-                                           className={`cell${highlightCell ? "-highlighted" : ""}`}>{value}</td>;
+                                           className={`cell${highlightCell ? "-highlighted" : ""}`}>
+                                    <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={popover}
+                                    >
+                                        <div>{value}</div>
+                                    </OverlayTrigger>
+                                </td>;
                             } else {
                                 if (value !== "-" && heading !== "Line") {
                                     return <td key={key}
                                                id={key}
                                                className="data-cell"
-                                               onClick={this.handleCellClick}>{value}</td>;
+                                        >
+                                        <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={popover}>
+                                            <div>{value}</div>
+                                        </OverlayTrigger>
+                                    </td>;
                                 }
                                 return <td key={key} id={key}>{value}</td>;
 

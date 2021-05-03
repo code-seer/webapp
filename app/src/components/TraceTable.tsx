@@ -2,6 +2,9 @@ import * as React from "react";
 import {inject, observer} from "mobx-react";
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
+import Overlay from 'react-bootstrap/Overlay';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover'
 import {TraceTableStore, UserCodeStore} from "../store/Stores";
 
 @inject('rootStore')
@@ -18,6 +21,10 @@ class TraceTable extends React.Component<any> {
         if (this.state.intervalId) {
             clearInterval(this.state.intervalId)
         }
+    }
+
+    handleCellClick = (event) => {
+        alert("cell clicked. Now what?")
     }
 
     /**
@@ -125,12 +132,34 @@ class TraceTable extends React.Component<any> {
                                 emptyRow = false;
                             }
 
+                            const popover = (
+                                <Popover id="popover-basic">
+                                    <Popover.Title as="h3">Popover right</Popover.Title>
+                                    <Popover.Content>
+                                        And here's some <strong>amazing</strong> content. It's very engaging.
+                                        right?
+                                    </Popover.Content>
+                                </Popover>
+                            );
+
+                            // <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+                            //     <Button variant="success">Click me to see</Button>
+                            // </OverlayTrigger>
+
                             let highlightCell = this.canHighlight(index, currLineNumIndex, heading, value);
                             if (highlightCell) {
                                 return <td key={key} id={key}
+                                           onClick={this.handleCellClick}
                                            className={`cell${highlightCell ? "-highlighted" : ""}`}>{value}</td>;
                             } else {
+                                if (value !== "-" && heading !== "Line") {
+                                    return <td key={key}
+                                               id={key}
+                                               className="data-cell"
+                                               onClick={this.handleCellClick}>{value}</td>;
+                                }
                                 return <td key={key} id={key}>{value}</td>;
+
                             }
 
                         })

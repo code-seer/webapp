@@ -20,15 +20,15 @@ export class UserCodeStore {
 
 # Sample code
 # Hit Play to execute
-input = 'John,Doe,1984,4,1,male'
+words = 'John,Doe,1984,4,1,male'
 
-tokens = input.split(',')
-firstName = tokens[0]
-lastName = tokens[1]
-birthdate = (int(tokens[2]), int(tokens[3]), int(tokens[4]))
-isMale = (tokens[5] == 'male')
+tokens = words.split(',')
+first_name = tokens[0]
+last_name = tokens[1]
+birth_date = (int(tokens[2]), int(tokens[3]), int(tokens[4]))
+is_male = (tokens[5] == 'male')
 
-print('Hi ' + firstName + ' ' + lastName)`;
+print('Hi ' + first_name + ' ' + last_name)`;
 
     @observable
     language: string = "python27";
@@ -239,25 +239,27 @@ export class TraceTableStore {
      */
     @action
     setHeadings() {
+        const allHeadings = {};
         const getKeys = (attributes) => {
-            const keys = new Set();
+            // Use an array to maintain the order in which the variables appear
+            const keys: any[] = [];
             if (attributes) {
                 Object.keys(attributes).forEach(key => {
-                    keys.add(key);
+                    if (allHeadings[key] === undefined) {
+                        keys.push(key);
+                        allHeadings[key] = true
+                    }
                 })
             }
             return keys;
         }
-        const headings = new Set();
+        const headings: any[] = [];
         this.trace?.forEach(it => {
-            const newHeadings = getKeys(it.globals);
-            newHeadings.forEach(item => {
-                headings.add(item);
-            })
+            headings.push(...getKeys(it.globals))
         })
         const result: any[] = [];
         result.push("Line");
-        result.push(...Array.from(headings.values()).sort());
+        result.push(...headings);
         result.push("Output");
         this.allHeadings = result;
     }

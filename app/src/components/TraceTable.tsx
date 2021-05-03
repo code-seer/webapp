@@ -139,7 +139,7 @@ class TraceTable extends React.Component<any> {
 
                             const popover = <Popover id="popover-contained">
                                 <Popover.Title as="h3">{heading}</Popover.Title>
-                                <Popover.Content>
+                                <Popover.Content className="cell-overlay-value">
                                     <strong>{value}</strong>
                                 </Popover.Content>
                             </Popover>
@@ -149,7 +149,7 @@ class TraceTable extends React.Component<any> {
                                 return <td key={key} id={key}
                                            onClick={this.handleCellClick}
                                            className={`cell${highlightCell ? "-highlighted" : ""}`}>
-                                    <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={popover}
+                                    <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={popover}
                                     >
                                         <div>{value}</div>
                                     </OverlayTrigger>
@@ -160,7 +160,7 @@ class TraceTable extends React.Component<any> {
                                                id={key}
                                                className="data-cell"
                                         >
-                                        <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={popover}>
+                                        <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={popover}>
                                             <div>{value}</div>
                                         </OverlayTrigger>
                                     </td>;

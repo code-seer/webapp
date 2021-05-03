@@ -102,6 +102,9 @@
 .data-cell {
   cursor: pointer;
 }
+.cell-overlay-value {
+  background: rgba(250, 231, 172, 0.67);
+}
 
 .cell-exception {
   background: #ff6464d9;

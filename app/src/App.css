@@ -90,7 +90,7 @@
   color: #4e555b;
   opacity: 0.4;
 }
-.learnet-table {
+.codeseer-table {
   text-align: center;
 }
 
@@ -127,10 +127,10 @@
   border-top: 1px solid #e8e8e8;
 }
 
-.learnet-table th, .learnet-table td {
+.codeseer-table th, .codeseer-table td {
   font-size: 13px;
 }
-.learnet-table tr {
+.codeseer-table tr {
   line-height: 1;
 }
 .table td {

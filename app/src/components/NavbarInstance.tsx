@@ -91,7 +91,7 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
         } = this.state;
         return (
             <Navbar bg="primary" variant="dark">
-                <Navbar.Brand href="#home">LearNet</Navbar.Brand>
+                <Navbar.Brand href="#home">CodeSeer</Navbar.Brand>
                 {/*<Nav className="mr-auto">*/}
                 {/*    <Nav.Link href="#home">Home</Nav.Link>*/}
                 {/*    <Nav.Link href="#features">Features</Nav.Link>*/}
@@ -106,17 +106,17 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
                 </Button>{' '}
                 <Modal show={showAboutDialog} onHide={this.handleAboutDialogClose} size="lg">
                     <Modal.Header closeButton>
-                        <Modal.Title>About LearNet</Modal.Title>
+                        <Modal.Title>About CodeSeer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group >
-                            LearNet is a table-based code visualizer. Unlike traditional debugging tools that only execute code forward, LearNet allows you to execute and trace code <strong>forward</strong> and <strong>backward</strong>. That means you can execute a line, see the changes, and undo the execution. You can undo code execution all the way to the first line of the code or move forward to the last line of the code.
+                            CodeSeer is a table-based code visualizer. Unlike traditional debugging tools that only execute code forward, CodeSeer allows you to execute and trace code <strong>forward</strong> and <strong>backward</strong>. That means you can execute a line, see the changes, and undo the execution. You can undo code execution all the way to the first line of the code or move forward to the last line of the code.
                             <br/>
                             <br/>
                             The ability to predict how a code would behave upon execution is an essential skill in software development. It is what allows one to read any code and understand what’s going on or take on a new problem and write out a concise solution. However, developing the intuition to do that is challenging, and sometimes even daunting for beginners. The reasons this is so difficult is because oftentimes there is no relation between what the code is doing and the way we are taught to solve problems or consume information.
                             <br/>
                             <br/>
-                            LearNet tries to bridge the gap between these two worlds by re-imagining the execution of code as a table for learning purposes. Even experienced software developers have to resort to some form of tracing either when debugging or writing the code in the first place. A trace table is our most natural intuition. It is this process of visualizing the trace of a code and building a mental model over time that helps one transition into being an algorithmic thinker.
+                            CodeSeer tries to bridge the gap between these two worlds by re-imagining the execution of code as a table for learning purposes. Even experienced software developers have to resort to some form of tracing either when debugging or writing the code in the first place. A trace table is our most natural intuition. It is this process of visualizing the trace of a code and building a mental model over time that helps one transition into being an algorithmic thinker.
                             <br/>
                             <br/>
 
@@ -148,7 +148,7 @@ class NavBarInstance extends React.Component<NavBarInstanceProps> {
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group >
-                            LearNet is a work in progress and we need your help to make it better. Please let us know how
+                            CodeSeer is a work in progress and we need your help to make it better. Please let us know how
                             we can improve the code visualizer. Thank you! <br/><br/>
                             <Form.Label>Name</Form.Label>
                             <Form.Control type="text" onChange={this.handleFeedbackNameChange} value={this.state.feedbackName} placeholder=""/><br/>

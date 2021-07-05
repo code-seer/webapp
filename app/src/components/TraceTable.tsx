@@ -186,7 +186,7 @@ class TraceTable extends React.Component<any> {
         };
 
         return (
-            <Table responsive="lg" className="learnet-table">
+            <Table responsive="lg" className="codeseer-table">
                 <thead>
                 <tr>
                     {this.traceTableStore.allHeadings.map(heading => {

@@ -1,14 +1,14 @@
 version: "3.3"
 services:
-  learnet_ui:
+  codeseer_ui:
     build: .
-    container_name: learnet_ui
+    container_name: codeseer_ui
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:learnet.io"
+      - "traefik.frontend.rule=Host:codeseer.net"
       - "traefik.port=80"
-      - "traefik.backend=learnet_ui"
+      - "traefik.backend=codeseer_ui"
       - "traefik.docker.network=traefik_network"
       - "traefik.frontend.entryPoints=http,https"
     networks:

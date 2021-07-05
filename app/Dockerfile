@@ -6,7 +6,7 @@ COPY package.json ./
 RUN npm install
 RUN npm audit fix
 
-ARG REACT_APP_SERVER_URL=https://api.learnet.io
+ARG REACT_APP_SERVER_URL=https://api.codeseer.net
 ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
 ENV PATH="./node_modules/.bin:$PATH"
 
